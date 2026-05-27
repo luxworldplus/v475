@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>M€₺RIC — Universal Intelligence</title>
+<!-- Dynamic SVG Favicon featuring the Turkish Lira (₺) -->
+<link class="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23150022' stroke='%23a020f0' stroke-width='6'/><text y='72' x='50' font-size='60' font-weight='bold' font-family='sans-serif' fill='%23d46bff' text-anchor='middle'>₺</text></svg>">
 <script src="https://js.puter.com/v2/"></script>
 
 <style>
@@ -663,77 +665,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Temp": 4
     };
 
-    async function detectLocalCurrency() {
-        try {
-            const res = await fetch("https://ipapi.co/json/");
-            if (!res.ok) throw new Error("Geo IP service unreachable");
-            const data = await res.json();
-            if (data && data.currency) {
-                return data.currency;
-            }
-        } catch (err) {
-            console.warn("Could not determine local currency via IP, using standard fallback:", err);
-        }
-        return "USD";
-    }
-
-    async function initCurrencies() {
-        try {
-            const res = await fetch(API + "USD");
-            const data = await res.json();
-            currencyList = Object.keys(data.rates);
-            latestRates = data.rates;
-
-            // Handle previous session rates for tracking differences
-            const savedRates = localStorage.getItem("metric_previous_rates");
-            if (savedRates) {
-                try {
-                    previousRates = JSON.parse(savedRates);
-                } catch (e) {
-                    console.warn("Failed to parse previous rates, starting fresh.");
-                }
-            }
-            // Save newly fetched rates as current reference for the NEXT app load
-            localStorage.setItem("metric_previous_rates", JSON.stringify(latestRates));
-
-            const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
-            const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
-            const savedAmount = localStorage.getItem("metric_amount");
-
-            if (savedAmount) amountInput.value = savedAmount;
-
-            detectedLocalCurrency = await detectLocalCurrency();
-            if (!currencyList.includes(detectedLocalCurrency)) {
-                detectedLocalCurrency = "USD";
-            }
-
-            let initialFrom = savedFrom;
-            
-            if (!initialFrom && currentCategory === "Currency") {
-                initialFrom = detectedLocalCurrency;
-            } else if (!initialFrom) {
-                initialFrom = currentCategory === "Length" ? "Meters" :
-                              currentCategory === "Weight" ? "Kilograms" :
-                              currentCategory === "Volume" ? "Liters" : "Celsius";
-            }
-
-            const activeIndex = categoryIndexes[currentCategory] ?? 0;
-            setCategory(currentCategory, activeIndex, false); 
-
-            if (currentCategory === "Currency") {
-                populateSelects(currencyList, initialFrom, savedTo || "EUR");
-                evalLocalCurrencyShortcut();
-            }
-
-            updateFavoriteStars();
-            renderTrendsCarousel();
-            setupAutoplay();
-
-        } catch (e) {
-            resultBox.textContent = "Error loading currencies. Check network connection.";
-        }
-    }
-
+    // State management and helper utilities defined upfront to prevent ReferenceErrors
     function saveState() {
         localStorage.setItem("metric_category", currentCategory);
         localStorage.setItem("metric_amount", amountInput.value);
@@ -761,7 +693,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Encodes complete conversion pair details so any combination of unit/category can be favorited
     function getPairKey(category, fromUnit, toUnit) {
         return `${category}|${fromUnit}|${toUnit}`;
     }
@@ -775,8 +706,26 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
+    function updateFavoriteStars() {
+        if (currentCategory !== "Currency") {
+            favPairBtn.style.display = "none";
+            return;
+        } else {
+            favPairBtn.style.display = "flex";
+        }
+
+        const fromVal = fromInput.value;
+        const toVal = toInput.value;
+        const currentKey = getPairKey(currentCategory, fromVal, toVal);
+
+        if (favorites.includes(currentKey)) {
+            favPairBtn.classList.add("active");
+        } else {
+            favPairBtn.classList.remove("active");
+        }
+    }
+
     function toggleFavoriteCurrentPair() {
-        // Strict constraint: Do not allow favoriting non-currencies
         if (currentCategory !== "Currency") return;
 
         const fromVal = fromInput.value;
@@ -802,26 +751,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setupAutoplay();
     }
 
-    function updateFavoriteStars() {
-        // If non-currency, hide the favorite button completely
-        if (currentCategory !== "Currency") {
-            favPairBtn.style.display = "none";
-            return;
-        } else {
-            favPairBtn.style.display = "flex";
-        }
-
-        const fromVal = fromInput.value;
-        const toVal = toInput.value;
-        const currentKey = getPairKey(currentCategory, fromVal, toVal);
-
-        if (favorites.includes(currentKey)) {
-            favPairBtn.classList.add("active");
-        } else {
-            favPairBtn.classList.remove("active");
-        }
-    }
-
     function generateConsistentTrend(pairKey) {
         const { category, from, to } = parsePairKey(pairKey);
         
@@ -832,7 +761,6 @@ document.addEventListener("DOMContentLoaded", () => {
             currentRate = latestRates[to] / latestRates[from];
         }
 
-        // Compare against previous session rates if cached, otherwise fallback to current rate
         if (previousRates && previousRates[from] && previousRates[to]) {
             previousRate = previousRates[to] / previousRates[from];
         } else {
@@ -846,12 +774,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const isUp = percentChange >= 0;
 
-        // Build a smooth visual arc from previousRate to currentRate
         const points = [];
         const steps = 7;
         for (let i = 0; i < steps; i++) {
             const t = i / (steps - 1);
-            // Add a natural curve in the center to look like a realistic financial sparkline
             const microFluctuation = Math.sin(t * Math.PI) * (currentRate - previousRate) * 0.15;
             const val = previousRate + (currentRate - previousRate) * t + microFluctuation;
             points.push(val);
@@ -875,7 +801,6 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // Calculates real-time cross-rates relative to USD on-the-fly
     function calculateLiveRate(category, from, to) {
         if (category === "Currency") {
             if (!latestRates[from] || !latestRates[to]) return "N/A";
@@ -966,7 +891,6 @@ document.addEventListener("DOMContentLoaded", () => {
             toggleFavoriteByKey(favKey);
         });
 
-        // Interactive card loading
         card.addEventListener("click", () => {
             const activeIndex = categoryIndexes[category] ?? 0;
             setCategory(category, activeIndex, false);
@@ -1108,6 +1032,76 @@ document.addEventListener("DOMContentLoaded", () => {
         saveState();
     }
 
+    async function detectLocalCurrency() {
+        try {
+            const res = await fetch("https://ipapi.co/json/");
+            if (!res.ok) throw new Error("Geo IP service unreachable");
+            const data = await res.json();
+            if (data && data.currency) {
+                return data.currency;
+            }
+        } catch (err) {
+            console.warn("Could not determine local currency via IP, using standard fallback:", err);
+        }
+        return "USD";
+    }
+
+    async function initCurrencies() {
+        try {
+            const res = await fetch(API + "USD");
+            const data = await res.json();
+            currencyList = Object.keys(data.rates);
+            latestRates = data.rates;
+
+            const savedRates = localStorage.getItem("metric_previous_rates");
+            if (savedRates) {
+                try {
+                    previousRates = JSON.parse(savedRates);
+                } catch (e) {
+                    console.warn("Failed to parse previous rates, starting fresh.");
+                }
+            }
+            localStorage.setItem("metric_previous_rates", JSON.stringify(latestRates));
+
+            const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
+            const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
+            const savedAmount = localStorage.getItem("metric_amount");
+
+            if (savedAmount) amountInput.value = savedAmount;
+
+            detectedLocalCurrency = await detectLocalCurrency();
+            if (!currencyList.includes(detectedLocalCurrency)) {
+                detectedLocalCurrency = "USD";
+            }
+
+            let initialFrom = savedFrom;
+            
+            if (!initialFrom && currentCategory === "Currency") {
+                initialFrom = detectedLocalCurrency;
+            } else if (!initialFrom) {
+                initialFrom = currentCategory === "Length" ? "Meters" :
+                              currentCategory === "Weight" ? "Kilograms" :
+                              currentCategory === "Volume" ? "Liters" : "Celsius";
+            }
+
+            const activeIndex = categoryIndexes[currentCategory] ?? 0;
+            setCategory(currentCategory, activeIndex, false); 
+
+            if (currentCategory === "Currency") {
+                populateSelects(currencyList, initialFrom, savedTo || "EUR");
+                evalLocalCurrencyShortcut();
+            }
+
+            updateFavoriteStars();
+            renderTrendsCarousel();
+            setupAutoplay();
+
+        } catch (e) {
+            resultBox.textContent = "Error loading currencies. Check network connection.";
+        }
+    }
+
+    // Event Listeners setup
     useDetectedLocalCurrencyBtn.addEventListener("click", () => {
         fromInput.value = detectedLocalCurrency;
         saveState();
@@ -1163,6 +1157,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // Run the app initialization safely after all declarations are bound
     initCurrencies();
 });
 </script>
