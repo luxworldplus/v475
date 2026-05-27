@@ -125,11 +125,17 @@
         background: var(--slider-bg);
         color: var(--text);
         box-sizing: border-box;
+        height: 52px; /* Set a fixed layout height so everything is identical */
     }
 
-    /* Updated Amount Input style to match From & To inputs exactly */
-    #amount {
-        margin-bottom: 14px;
+    /* Standardize number field look and remove outer browser spin buttons */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
     }
 
     /* Local Currency Helper Trigger Banner */
@@ -505,7 +511,10 @@
             <div class="tab" onclick="setCategory('Temp', 4)">Temp</div>
         </div>
 
-        <input id="amount" type="number" placeholder="Amount">
+        <!-- Wrapped in input-row to match From and To inputs exactly -->
+        <div class="input-row">
+            <input id="amount" type="number" placeholder="Amount">
+        </div>
         
         <div class="input-row">
             <input id="from" list="fromList" placeholder="From (Type to search)">
