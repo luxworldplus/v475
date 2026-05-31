@@ -6,7 +6,6 @@
 <title>M€₺RIC — Universal Intelligence</title>
 <!-- Dynamic SVG Favicon featuring the Turkish Lira (₺) -->
 <link class="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23150022' stroke='%23a020f0' stroke-width='6'/><text y='72' x='50' font-size='60' font-weight='bold' font-family='sans-serif' fill='%23d46bff' text-anchor='middle'>₺</text></svg>">
-<script src="https://js.puter.com/v2/"></script>
 
 <style>
     :root {
@@ -74,7 +73,6 @@
         text-shadow: 0 0 10px #a020f0;
     }
 
-    /* Slider / Tabs styling */
     .slider-container {
         display: flex;
         background: var(--slider-bg);
@@ -108,7 +106,6 @@
         z-index: 0;
     }
 
-    /* Input grouping */
     .input-row {
         position: relative;
         display: flex;
@@ -127,10 +124,9 @@
         background: var(--slider-bg);
         color: var(--text);
         box-sizing: border-box;
-        height: 52px; /* Set a fixed layout height so everything is identical */
+        height: 52px;
     }
 
-    /* Standardize number field look and remove outer browser spin buttons */
     input[type=number]::-webkit-inner-spin-button, 
     input[type=number]::-webkit-outer-spin-button { 
         -webkit-appearance: none; 
@@ -140,7 +136,6 @@
         -moz-appearance: textfield;
     }
 
-    /* Local Currency Helper Trigger Banner */
     .local-helper {
         font-size: 13px;
         margin-top: -6px;
@@ -175,12 +170,11 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Single Favorite Star Button next to Convert */
     .fav-pair-btn {
         background: var(--slider-bg);
         border: 1px solid #4a1570;
         color: #553570;
-        font-size: 26px;
+        font-size: 24px;
         cursor: pointer;
         padding: 0;
         transition: all 0.2s ease;
@@ -191,6 +185,11 @@
         height: 52px;
         border-radius: 6px;
         box-sizing: border-box;
+    }
+
+    .fav-pair-btn:hover {
+        border-color: var(--accent2);
+        color: var(--text);
     }
 
     .fav-pair-btn.active {
@@ -211,7 +210,6 @@
         margin-bottom: 0 !important;
     }
 
-    /* Fix datalist arrow for webkit */
     input::-webkit-calendar-picker-indicator {
         filter: invert(1);
         opacity: 0.5;
@@ -253,7 +251,7 @@
     }
 
     /* =========================================
-        TRENDS SPOTLIGHT CAROUSEL WITH ARROWS
+        TRENDS SPOTLIGHT CAROUSEL
        ========================================= */
     .carousel-section {
         margin-bottom: 25px;
@@ -348,24 +346,35 @@
         font-weight: bold;
     }
 
-    .card-remove {
+    .card-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .card-action-btn {
         cursor: pointer;
-        color: #ff3333;
-        font-size: 16px;
-        opacity: 0.6;
         background: none;
         border: none;
-        width: auto;
-        padding: 4px;
+        padding: 2px;
         margin: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        width: 24px;
+        height: 24px;
+        color: #9d80c0;
+        font-size: 14px;
+        transition: color 0.2s;
     }
 
-    .card-remove:hover {
-        opacity: 1;
+    .card-action-btn:hover {
+        color: var(--accent2);
         background: none;
+    }
+
+    .card-action-btn.delete:hover {
+        color: #ff3333;
     }
 
     .card-rate {
@@ -375,47 +384,12 @@
         margin-bottom: 4px;
     }
 
-    .card-prev-rate {
-        font-size: 11px;
-        color: #9d80c0;
-        margin-bottom: 4px;
-    }
-
-    .card-trend-info {
-        display: flex;
-        align-items: center;
-        gap: 5px;
+    .card-inverse-rate {
         font-size: 12px;
-        font-weight: bold;
+        color: #9d80c0;
         margin-bottom: 10px;
     }
 
-    .trend-up {
-        color: var(--success);
-    }
-
-    .trend-down {
-        color: var(--danger);
-    }
-
-    .sparkline-svg {
-        width: 100%;
-        height: 45px;
-        stroke-width: 2;
-        fill: none;
-    }
-
-    .sparkline-svg.up {
-        stroke: var(--success);
-        filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.4));
-    }
-
-    .sparkline-svg.down {
-        stroke: var(--danger);
-        filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.4));
-    }
-
-    /* Carousel Dot indicators */
     .carousel-dots {
         display: flex;
         justify-content: center;
@@ -429,6 +403,7 @@
         background: #3a1c5c;
         border-radius: 50%;
         transition: background 0.3s;
+        cursor: pointer;
     }
 
     .carousel-dot.active {
@@ -436,8 +411,10 @@
         box-shadow: 0 0 6px var(--accent2);
     }
 
-    /* AI Box */
-    .ai-box {
+    /* =========================================
+        LOGS & PERFORMANCE UTILITY CONTAINER
+       ========================================= */
+    .utility-box {
         margin-top: 10px;
         padding: 20px;
         background: #1d0030;
@@ -449,12 +426,84 @@
         min-height: 250px;
     }
 
-    .ai-output {
-        margin-top: 15px;
-        white-space: pre-wrap;
-        line-height: 1.5;
+    .utility-header {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .utility-tab-btn {
+        flex: 1;
+        margin-bottom: 0;
+        padding: 10px;
+        font-size: 13px;
+        background: var(--slider-bg);
+        border: 1px solid #4a1570;
+        color: var(--text);
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .utility-tab-btn.active {
+        background: var(--accent);
+        border-color: var(--accent2);
+        box-shadow: 0 0 8px var(--accent);
+    }
+
+    .panel-view {
         flex-grow: 1;
         overflow-y: auto;
+        font-size: 13px;
+    }
+
+    .hub-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 5px;
+    }
+
+    .hub-table th, .hub-table td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #33154d;
+    }
+
+    .hub-table th {
+        color: var(--accent2);
+        font-weight: bold;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .hub-table tr:hover {
+        background: rgba(160, 32, 240, 0.1);
+    }
+
+    .hub-load-btn {
+        background: var(--accent);
+        padding: 4px 8px;
+        font-size: 11px;
+        border-radius: 4px;
+        margin: 0;
+        width: auto;
+        display: inline-block;
+    }
+
+    /* Real-Time Sparkline styling */
+    .trend-sparkline-mini {
+        width: 60px;
+        height: 20px;
+        stroke: var(--success);
+        stroke-width: 1.5;
+        fill: none;
+    }
+
+    .empty-prompt {
+        padding: 20px;
+        font-style: italic;
+        color: #8a6da6;
+        text-align: center;
     }
 
     /* =========================================
@@ -513,7 +562,7 @@
             <div class="tab" onclick="setCategory('Temp', 4)">Temp</div>
         </div>
 
-        <!-- Wrapped in input-row to match From and To inputs exactly -->
+        <!-- Wrapped in input-row to match layouts -->
         <div class="input-row">
             <input id="amount" type="number" placeholder="Amount">
         </div>
@@ -523,7 +572,6 @@
             <datalist id="fromList"></datalist>
         </div>
 
-        <!-- Optional helper indicator for travelers or incorrect local currency detection -->
         <div class="local-helper" id="localHelper">
             <span style="color: #9d80c0;">Not your local currency?</span>
             <button id="useDetectedLocalCurrency" class="local-helper-btn">Change it to <span id="detectedLocalCode">USD</span></button>
@@ -536,6 +584,7 @@
 
         <div class="convert-row">
             <button id="convert" class="convert-btn">Convert</button>
+            <button id="swapBtn" class="fav-pair-btn" title="Swap From and To inputs">⇅</button>
             <button id="favPairBtn" class="fav-pair-btn" title="Add this exact pair to your favorites">★</button>
         </div>
 
@@ -547,7 +596,7 @@
         <div class="carousel-section">
             <div class="carousel-title">
                 <span>Favorite Custom Trends</span>
-                <span id="carouselTimerLabel" style="font-size: 11px; opacity: 0.7;">Change since last open</span>
+                <span id="carouselTimerLabel" style="font-size: 11px; opacity: 0.7;">Active live rates</span>
             </div>
             
             <div class="carousel-outer-wrapper">
@@ -565,12 +614,16 @@
             </div>
         </div>
 
-        <h2 id="aiTitle">Currency Intelligence</h2>
+        <h2 id="hubTitle">Performance & Logs</h2>
 
-        <div class="ai-box">
-            <input id="aiPrompt" placeholder="Ask: What is JPY? Why is USD strong? etc.">
-            <button id="aiGo">Explain Unit</button>
-            <div class="ai-output" id="aiOutput"></div>
+        <div class="utility-box">
+            <div class="utility-header">
+                <button id="tabFavorites" class="utility-tab-btn active">📋 Registry & Inverses</button>
+                <button id="tabHistory" class="utility-tab-btn">🕒 Session History (Last 7)</button>
+            </div>
+            <div class="panel-view" id="panelView">
+                <!-- Swapped dynamic content displays here -->
+            </div>
         </div>
     </div>
 
@@ -588,33 +641,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const amountInput = document.getElementById("amount");
     const resultBox = document.getElementById("result");
     const mainTitle = document.getElementById("mainTitle");
-    const aiTitle = document.getElementById("aiTitle");
-    const aiPrompt = document.getElementById("aiPrompt");
     const sliderHighlight = document.getElementById("sliderHighlight");
     const carouselContainer = document.getElementById("carouselContainer");
     const carouselDots = document.getElementById("carouselDots");
     const carouselPrevBtn = document.getElementById("carouselPrevBtn");
     const carouselNextBtn = document.getElementById("carouselNextBtn");
     const favPairBtn = document.getElementById("favPairBtn");
+    const swapBtn = document.getElementById("swapBtn");
     const localHelper = document.getElementById("localHelper");
     const detectedLocalCodeSpan = document.getElementById("detectedLocalCode");
     const useDetectedLocalCurrencyBtn = document.getElementById("useDetectedLocalCurrency");
+    
+    const tabFavorites = document.getElementById("tabFavorites");
+    const tabHistory = document.getElementById("tabHistory");
+    const panelView = document.getElementById("panelView");
 
     let currentCategory = localStorage.getItem("metric_category") || "Currency";
     let currencyList = [];
-    let latestRates = {}; // Store USD base rates for global cross-rate calculations
-    let previousRates = null; // Store cached rates from last session
+    let latestRates = {}; // Store USD base rates for global calculations
     let detectedLocalCurrency = "USD"; // Holds geo-IP detected currency
 
-    // Empty favorites by default - filter out any legacy non-currencies
+    // Empty favorites by default - filter out any legacy non-currencies if there are any
     let rawFavorites = JSON.parse(localStorage.getItem("metric_favorites_pairs")) || [];
-    let favorites = rawFavorites.filter(key => {
-        return key.startsWith("Currency|");
-    });
+    let favorites = rawFavorites.filter(key => key.includes("|") && key.startsWith("Currency|"));
     localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
+
+    // Session log of last 7 opens
+    let sessionHistory = JSON.parse(localStorage.getItem("metric_session_history")) || [];
 
     let currentTrendIndex = 0;
     let autoplayInterval = null;
+    let activeHubTab = "favorites"; // "favorites" or "history"
 
     // Conversion Data
     const units = {
@@ -665,7 +722,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "Temp": 4
     };
 
-    // State management and helper utilities defined upfront to prevent ReferenceErrors
     function saveState() {
         localStorage.setItem("metric_category", currentCategory);
         localStorage.setItem("metric_amount", amountInput.value);
@@ -707,25 +763,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateFavoriteStars() {
-        if (currentCategory !== "Currency") {
-            favPairBtn.style.display = "none";
-            return;
-        } else {
-            favPairBtn.style.display = "flex";
-        }
-
         const fromVal = fromInput.value;
         const toVal = toInput.value;
         const currentKey = getPairKey(currentCategory, fromVal, toVal);
 
-        if (favorites.includes(currentKey)) {
-            favPairBtn.classList.add("active");
+        // Star button is only functional and shown in currency mode
+        if (currentCategory === "Currency") {
+            favPairBtn.style.display = "flex";
+            if (favorites.includes(currentKey)) {
+                favPairBtn.classList.add("active");
+            } else {
+                favPairBtn.classList.remove("active");
+            }
         } else {
-            favPairBtn.classList.remove("active");
+            favPairBtn.style.display = "none";
         }
     }
 
     function toggleFavoriteCurrentPair() {
+        // Users can only favorite Currency
         if (currentCategory !== "Currency") return;
 
         const fromVal = fromInput.value;
@@ -748,57 +804,8 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
         updateFavoriteStars();
         renderTrendsCarousel();
+        renderActivePanel();
         setupAutoplay();
-    }
-
-    function generateConsistentTrend(pairKey) {
-        const { category, from, to } = parsePairKey(pairKey);
-        
-        let currentRate = 0;
-        let previousRate = 0;
-
-        if (latestRates[from] && latestRates[to]) {
-            currentRate = latestRates[to] / latestRates[from];
-        }
-
-        if (previousRates && previousRates[from] && previousRates[to]) {
-            previousRate = previousRates[to] / previousRates[from];
-        } else {
-            previousRate = currentRate;
-        }
-
-        let percentChange = 0;
-        if (previousRate > 0) {
-            percentChange = ((currentRate - previousRate) / previousRate) * 100;
-        }
-
-        const isUp = percentChange >= 0;
-
-        const points = [];
-        const steps = 7;
-        for (let i = 0; i < steps; i++) {
-            const t = i / (steps - 1);
-            const microFluctuation = Math.sin(t * Math.PI) * (currentRate - previousRate) * 0.15;
-            const val = previousRate + (currentRate - previousRate) * t + microFluctuation;
-            points.push(val);
-        }
-
-        const svgPoints = points.map((p, index) => {
-            const x = (index / (steps - 1)) * 150;
-            const minY = Math.min(...points);
-            const maxY = Math.max(...points);
-            const range = (maxY - minY) || 1;
-            const y = 35 - ((p - minY) / range) * 30; 
-            return `${x},${y}`;
-        }).join(" ");
-
-        return { 
-            isUp, 
-            percentChange: percentChange.toFixed(4), 
-            svgPoints,
-            previousRate: previousRate.toFixed(4),
-            currentRate: currentRate.toFixed(4)
-        };
     }
 
     function calculateLiveRate(category, from, to) {
@@ -813,6 +820,41 @@ document.addEventListener("DOMContentLoaded", () => {
             const rate = baseRates[from] / baseRates[to];
             return rate < 0.001 ? rate.toExponential(4) : rate.toFixed(4);
         }
+    }
+
+    function generateRealHistorySparkline(favKey) {
+        // Gather historical rates from session snapshots from oldest to newest
+        let historyRates = sessionHistory
+            .slice()
+            .reverse()
+            .map(s => parseFloat(s.rates[favKey]))
+            .filter(val => !isNaN(val) && isFinite(val));
+
+        const fallbackRate = parseFloat(calculateLiveRate("Currency", parsePairKey(favKey).from, parsePairKey(favKey).to));
+
+        // If we have less than 2 data points, inject the fallback rate to make a stable flat line
+        if (historyRates.length === 0) {
+            historyRates = [fallbackRate, fallbackRate];
+        } else if (historyRates.length === 1) {
+            historyRates.unshift(historyRates[0]);
+        }
+
+        const latest = historyRates[historyRates.length - 1];
+        const oldest = historyRates[0];
+        const isUp = latest >= oldest;
+
+        const minY = Math.min(...historyRates);
+        const maxY = Math.max(...historyRates);
+        const range = maxY - minY || 1;
+
+        // Scale coordinates to fit viewBox="0 0 100 25"
+        const points = historyRates.map((rate, i) => {
+            const x = (i / (historyRates.length - 1)) * 100;
+            const y = 22 - ((rate - minY) / range) * 19; // Bound y with comfortable cushion inside 25px height
+            return `${x.toFixed(1)},${y.toFixed(1)}`;
+        }).join(" ");
+
+        return { points, isUp };
     }
 
     function setupAutoplay() {
@@ -835,14 +877,28 @@ document.addEventListener("DOMContentLoaded", () => {
         setupAutoplay();
     }
 
+    function invertFavoritePair(key) {
+        const { category, from, to } = parsePairKey(key);
+        const newKey = getPairKey(category, to, from);
+        
+        const idx = favorites.indexOf(key);
+        if (idx > -1) {
+            favorites[idx] = newKey;
+            localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
+            updateFavoriteStars();
+            renderTrendsCarousel();
+            renderActivePanel();
+        }
+    }
+
     function renderTrendsCarousel() {
         carouselContainer.innerHTML = "";
         carouselDots.innerHTML = "";
 
         if (favorites.length === 0) {
             carouselContainer.innerHTML = `
-                <div style="padding: 20px; font-style: italic; color: #8a6da6; text-align: center; width: 100%;">
-                    No active trends. Star currency conversions below to track relative changes!
+                <div class="empty-prompt">
+                    No active trends. Star currency conversions below to track rates!
                 </div>
             `;
             carouselPrevBtn.style.opacity = "0.3";
@@ -864,7 +920,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const favKey = favorites[currentTrendIndex];
         const { category, from, to } = parsePairKey(favKey);
         const liveRate = calculateLiveRate(category, from, to);
-        const trend = generateConsistentTrend(favKey);
+        const inverseRate = calculateLiveRate(category, to, from);
+
+        // Fetch the real trend slope built on the user's logged open sessions
+        const trendData = generateRealHistorySparkline(favKey);
 
         const card = document.createElement("div");
         card.className = "carousel-card";
@@ -873,22 +932,31 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="card-header">
                 <span class="card-currency">${from} / ${to}</span>
                 <span class="card-category-badge">${category}</span>
-                <button class="card-remove" data-key="${favKey}" title="Remove favorite">×</button>
+                <div class="card-actions">
+                    <button class="card-action-btn invert-btn" title="Invert this pair">⇅</button>
+                    <button class="card-action-btn delete" title="Remove favorite">×</button>
+                </div>
             </div>
-            <div class="card-rate">1 ${from} = ${liveRate}</div>
-            <div class="card-prev-rate">Opened last at: ${trend.previousRate}</div>
-            <div class="card-trend-info ${trend.isUp ? 'trend-up' : 'trend-down'}">
-                <span>${trend.isUp ? '▲' : '▼'}</span>
-                <span>${trend.isUp ? '+' : ''}${trend.percentChange}%</span>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div>
+                    <div class="card-rate">1 ${from} = ${liveRate}</div>
+                    <div class="card-inverse-rate">1 ${to} = ${inverseRate}</div>
+                </div>
+                <!-- Interactive SVG slope demonstrating real trajectory changes -->
+                <svg viewBox="0 0 100 25" style="width: 80px; height: 24px; margin-bottom: 8px;">
+                    <polyline points="${trendData.points}" style="fill:none; stroke:${trendData.isUp ? 'var(--success)' : 'var(--danger)'}; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 1.5px ${trendData.isUp ? 'var(--success)' : 'var(--danger)'})"></polyline>
+                </svg>
             </div>
-            <svg class="sparkline-svg ${trend.isUp ? 'up' : 'down'}" viewBox="0 0 150 40">
-                <polyline points="${trend.svgPoints}"></polyline>
-            </svg>
         `;
 
-        card.querySelector(".card-remove").addEventListener("click", (e) => {
+        card.querySelector(".delete").addEventListener("click", (e) => {
             e.stopPropagation();
             toggleFavoriteByKey(favKey);
+        });
+
+        card.querySelector(".invert-btn").addEventListener("click", (e) => {
+            e.stopPropagation();
+            invertFavoritePair(favKey);
         });
 
         card.addEventListener("click", () => {
@@ -928,6 +996,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
         updateFavoriteStars();
         renderTrendsCarousel();
+        renderActivePanel();
         setupAutoplay();
     }
 
@@ -945,32 +1014,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cat === "Currency") {
             mainTitle.textContent = "Currency Converter";
-            aiTitle.textContent = "Currency Intelligence";
-            aiPrompt.placeholder = "Ask: What is JPY? Why is USD strong? etc.";
             populateSelects(currencyList, savedFrom || detectedLocalCurrency, savedTo || "EUR");
             evalLocalCurrencyShortcut();
         } else {
             localHelper.style.display = "none";
             if (cat === "Length") {
                 mainTitle.textContent = "Length Converter";
-                aiTitle.textContent = "Measurement Intelligence";
-                aiPrompt.placeholder = "Ask: History of the Mile, How long is a lightyear? etc.";
                 populateSelects(Object.keys(units.Length), savedFrom || "Meters", savedTo || "Feet");
             } else if (cat === "Weight") {
                 mainTitle.textContent = "Weight Converter";
-                aiTitle.textContent = "Weight Intelligence";
-                aiPrompt.placeholder = "Ask: What is a Troy Ounce? Metric vs Imperial etc.";
                 populateSelects(Object.keys(units.Weight), savedFrom || "Kilograms", savedTo || "Pounds");
             } else if (cat === "Volume") {
                 mainTitle.textContent = "Volume Converter";
-                aiTitle.textContent = "Fluid Intelligence";
-                aiPrompt.placeholder = "Ask: How many liters in a barrel? UK vs US gallons? etc.";
                 populateSelects(Object.keys(units.Volume), savedFrom || "Liters", savedTo || "US Gallons");
             } else if (cat === "Temp") {
                 mainTitle.textContent = "Temperature Converter";
-                aiTitle.textContent = "Thermal Intelligence";
                 populateSelects(units.Temp, savedFrom || "Celsius", savedTo || "Fahrenheit");
-                aiPrompt.placeholder = "Ask: Who invented Fahrenheit? Absolute zero? etc.";
             }
         }
 
@@ -1046,22 +1105,162 @@ document.addEventListener("DOMContentLoaded", () => {
         return "USD";
     }
 
+    function recordSessionSnapshot() {
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const dateStr = new Date().toLocaleDateString([], { month: 'short', day: 'numeric' });
+        
+        const snapshot = {
+            sessionLabel: `${dateStr} @ ${timeStr}`,
+            rates: {}
+        };
+
+        // Record current conversion rates for each favorite pair
+        favorites.forEach(favKey => {
+            const { category, from, to } = parsePairKey(favKey);
+            snapshot.rates[favKey] = calculateLiveRate(category, from, to);
+        });
+
+        // "in the 7 list make sure that the increases by 0.0000 do not count towards that seven"
+        // Let's compare with the most recent logged snapshot to verify if a real shift occurred
+        if (sessionHistory.length > 0) {
+            const lastSession = sessionHistory[0];
+            let rateChanged = false;
+
+            for (const favKey of favorites) {
+                const prevVal = parseFloat(lastSession.rates[favKey]);
+                const newVal = parseFloat(snapshot.rates[favKey]);
+
+                // Check if the change is non-zero (greater than 0.0000 range)
+                if (isNaN(prevVal) || Math.abs(newVal - prevVal) > 0.00001) {
+                    rateChanged = true;
+                    break;
+                }
+            }
+
+            // If rates are completely static across all favorites, skip recording this redundant snapshot!
+            if (!rateChanged && favorites.length > 0) {
+                console.log("Ignored identical session to protect historical logs from duplicate opens.");
+                return;
+            }
+        }
+
+        sessionHistory.unshift(snapshot);
+        if (sessionHistory.length > 7) {
+            sessionHistory = sessionHistory.slice(0, 7);
+        }
+
+        localStorage.setItem("metric_session_history", JSON.stringify(sessionHistory));
+    }
+
+    function renderActivePanel() {
+        panelView.innerHTML = "";
+        
+        if (activeHubTab === "favorites") {
+            tabFavorites.classList.add("active");
+            tabHistory.classList.remove("active");
+
+            if (favorites.length === 0) {
+                panelView.innerHTML = `<div class="empty-prompt">No custom favorite registry items are currently tracked.</div>`;
+                return;
+            }
+
+            const table = document.createElement("table");
+            table.className = "hub-table";
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Saved Unit Pair</th>
+                        <th>Direct Value</th>
+                        <th>Inverse Value</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="favTableBody"></tbody>
+            `;
+
+            panelView.appendChild(table);
+            const tbody = document.getElementById("favTableBody");
+
+            favorites.forEach(favKey => {
+                const { category, from, to } = parsePairKey(favKey);
+                const directVal = calculateLiveRate(category, from, to);
+                const inverseVal = calculateLiveRate(category, to, from);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td style="font-weight:bold; color:var(--text);">${from} ➔ ${to}</td>
+                    <td>1 = ${directVal}</td>
+                    <td>1 = ${inverseVal}</td>
+                    <td><button class="hub-load-btn" data-key="${favKey}">Load</button></td>
+                `;
+
+                row.querySelector(".hub-load-btn").addEventListener("click", () => {
+                    const activeIndex = categoryIndexes[category] ?? 0;
+                    setCategory(category, activeIndex, false);
+                    populateSelects(category === "Currency" ? currencyList : (category === "Temp" ? units.Temp : Object.keys(units[category])), from, to);
+                    saveState();
+                    updateFavoriteStars();
+                    evalLocalCurrencyShortcut();
+                });
+
+                tbody.appendChild(row);
+            });
+
+        } else if (activeHubTab === "history") {
+            tabFavorites.classList.remove("active");
+            tabHistory.classList.add("active");
+
+            if (favorites.length === 0) {
+                panelView.innerHTML = `<div class="empty-prompt">No saved favorite pairs. Star conversions to log loading trends.</div>`;
+                return;
+            }
+
+            if (sessionHistory.length === 0) {
+                panelView.innerHTML = `<div class="empty-prompt">No session logs captured. Reload the app to capture loading points.</div>`;
+                return;
+            }
+
+            const table = document.createElement("table");
+            table.className = "hub-table";
+            
+            // Build columns for each favorite pair currently tracked
+            let headerCells = `<th>Session Landmark</th>`;
+            favorites.forEach(favKey => {
+                const { from, to } = parsePairKey(favKey);
+                headerCells += `<th>${from}/${to}</th>`;
+            });
+
+            table.innerHTML = `
+                <thead>
+                    <tr>${headerCells}</tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+            `;
+
+            panelView.appendChild(table);
+            const tbody = document.getElementById("historyTableBody");
+
+            sessionHistory.forEach(session => {
+                const row = document.createElement("tr");
+                let cells = `<td style="font-size:11px; opacity:0.8;">${session.sessionLabel}</td>`;
+                
+                favorites.forEach(favKey => {
+                    const currentRecordedRate = session.rates[favKey] || calculateLiveRate(parsePairKey(favKey).category, parsePairKey(favKey).from, parsePairKey(favKey).to);
+                    cells += `<td>${currentRecordedRate}</td>`;
+                });
+
+                row.innerHTML = cells;
+                tbody.appendChild(row);
+            });
+        }
+    }
+
     async function initCurrencies() {
         try {
             const res = await fetch(API + "USD");
             const data = await res.json();
             currencyList = Object.keys(data.rates);
             latestRates = data.rates;
-
-            const savedRates = localStorage.getItem("metric_previous_rates");
-            if (savedRates) {
-                try {
-                    previousRates = JSON.parse(savedRates);
-                } catch (e) {
-                    console.warn("Failed to parse previous rates, starting fresh.");
-                }
-            }
-            localStorage.setItem("metric_previous_rates", JSON.stringify(latestRates));
 
             const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
             const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
@@ -1092,8 +1291,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 evalLocalCurrencyShortcut();
             }
 
+            // Capture snapshot load points
+            recordSessionSnapshot();
+
             updateFavoriteStars();
             renderTrendsCarousel();
+            renderActivePanel();
             setupAutoplay();
 
         } catch (e) {
@@ -1101,12 +1304,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Event Listeners setup
     useDetectedLocalCurrencyBtn.addEventListener("click", () => {
         fromInput.value = detectedLocalCurrency;
         saveState();
         evalLocalCurrencyShortcut();
         updateFavoriteStars();
+        if (amountInput.value) {
+            convert();
+        }
+    });
+
+    swapBtn.addEventListener("click", () => {
+        const temp = fromInput.value;
+        fromInput.value = toInput.value;
+        toInput.value = temp;
+        saveState();
+        updateFavoriteStars();
+        evalLocalCurrencyShortcut();
         if (amountInput.value) {
             convert();
         }
@@ -1127,37 +1341,19 @@ document.addEventListener("DOMContentLoaded", () => {
     carouselPrevBtn.addEventListener("click", () => handleManualNavigation(-1));
     carouselNextBtn.addEventListener("click", () => handleManualNavigation(1));
 
-    document.getElementById("convert").addEventListener("click", convert);
-
-    /* Puter.js AI Integration */
-    const aiBtn = document.getElementById("aiGo");
-    const aiOutput = document.getElementById("aiOutput");
-
-    aiBtn.addEventListener("click", async () => {
-        const promptText = aiPrompt.value.trim();
-        if (!promptText) return;
-
-        aiOutput.textContent = "Analyzing data...";
-        
-        let sysPrompt = "You are an expert. Explain the concept clearly and concisely.";
-        if (currentCategory === "Currency") {
-            sysPrompt = "You are a top-tier global economics and currency expert. Explain the history, country, value, inflation, global role, and interesting facts of the requested currency.";
-        } else {
-            sysPrompt = `You are a metrology and science expert. Explain the history, standard definition, global usage, and interesting facts about this unit of ${currentCategory.toLowerCase()}.`;
-        }
-
-        try {
-            const response = await puter.ai.chat(
-                `Explain this in detail: ${promptText}`,
-                { model: 'gpt-4o-mini', systemPrompt: sysPrompt }
-            );
-            aiOutput.textContent = response.message.content || response;
-        } catch (error) {
-            aiOutput.textContent = "AI System offline or error occurred. " + error.message;
-        }
+    tabFavorites.addEventListener("click", () => {
+        activeHubTab = "favorites";
+        renderActivePanel();
     });
 
-    // Run the app initialization safely after all declarations are bound
+    tabHistory.addEventListener("click", () => {
+        activeHubTab = "history";
+        renderActivePanel();
+    });
+
+    document.getElementById("convert").addEventListener("click", convert);
+
+    // Initial load orchestration
     initCurrencies();
 });
 </script>
