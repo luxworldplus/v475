@@ -1120,24 +1120,39 @@ document.addEventListener("DOMContentLoaded", () => {
             snapshot.rates[favKey] = calculateLiveRate(category, from, to);
         });
 
-        // "in the 7 list make sure that the increases by 0.0000 do not count towards that seven"
-        // Let's compare with the most recent logged snapshot to verify if a real shift occurred
+        // Robust duplicate session logger filtering out identical loads/static values
         if (sessionHistory.length > 0) {
             const lastSession = sessionHistory[0];
+            
+            // Compare list of tracked keys to check if composition is identical
+            const lastKeys = Object.keys(lastSession.rates || {});
+            const currentKeys = Object.keys(snapshot.rates);
+            const keysChanged = lastKeys.length !== currentKeys.length || !currentKeys.every(k => lastKeys.includes(k));
+
             let rateChanged = false;
 
-            for (const favKey of favorites) {
-                const prevVal = parseFloat(lastSession.rates[favKey]);
-                const newVal = parseFloat(snapshot.rates[favKey]);
+            if (keysChanged) {
+                rateChanged = true;
+            } else {
+                for (const favKey of favorites) {
+                    const prevVal = parseFloat(lastSession.rates[favKey]);
+                    const newVal = parseFloat(snapshot.rates[favKey]);
 
-                // Check if the change is non-zero (greater than 0.0000 range)
-                if (isNaN(prevVal) || Math.abs(newVal - prevVal) > 0.00001) {
-                    rateChanged = true;
-                    break;
+                    // Check if the change is non-zero (greater than 0.0000 range)
+                    if (!isNaN(prevVal) && !isNaN(newVal)) {
+                        if (Math.abs(newVal - prevVal) > 0.00001) {
+                            rateChanged = true;
+                            break;
+                        }
+                    } else if (isNaN(prevVal) && !isNaN(newVal)) {
+                        // Protect against migrations or undefined entries (new favorites)
+                        rateChanged = true;
+                        break;
+                    }
                 }
             }
 
-            // If rates are completely static across all favorites, skip recording this redundant snapshot!
+            // If rates are completely static across all favorites, skip recording this duplicate snapshot!
             if (!rateChanged && favorites.length > 0) {
                 console.log("Ignored identical session to protect historical logs from duplicate opens.");
                 return;
@@ -1245,7 +1260,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 let cells = `<td style="font-size:11px; opacity:0.8;">${session.sessionLabel}</td>`;
                 
                 favorites.forEach(favKey => {
-                    const currentRecordedRate = session.rates[favKey] || calculateLiveRate(parsePairKey(favKey).category, parsePairKey(favKey).from, parsePairKey(favKey).to);
+                    const currentRecordedRate = (session.rates && session.rates[favKey] !== undefined) 
+                        ? session.rates[favKey] 
+                        : calculateLiveRate(parsePairKey(favKey).category, parsePairKey(favKey).from, parsePairKey(favKey).to);
                     cells += `<td>${currentRecordedRate}</td>`;
                 });
 
@@ -1291,7 +1308,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 evalLocalCurrencyShortcut();
             }
 
-            // Capture snapshot load points
+            // Capture snapshot load points (with robust duplicates removal logic)
             recordSessionSnapshot();
 
             updateFavoriteStars();
