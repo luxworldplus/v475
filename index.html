@@ -17,6 +17,8 @@
         --slider-bg: #2a0040;
         --success: #10b981;
         --danger: #ef4444;
+        --border-color: #3a0058;
+        --shadow-color: rgba(0, 0, 0, 0.4);
     }
 
     body {
@@ -27,24 +29,60 @@
         padding: 0;
         min-height: 100vh;
         overflow-x: hidden;
+        transition: background 0.3s, color 0.3s;
+    }
+
+    .header-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+        box-sizing: border-box;
+        z-index: 10;
     }
 
     .logo {
-        position: absolute;
-        top: 15px;
-        left: 20px;
         font-size: 24px;
         font-weight: bold;
         color: var(--accent2);
         letter-spacing: 2px;
-        text-shadow: 0 0 10px #a020f0;
-        z-index: 10;
+        text-shadow: 0 0 10px var(--accent);
+    }
+
+    .settings-trigger {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        transition: all 0.2s ease;
+        width: auto;
+        margin: 0;
+    }
+
+    .settings-trigger:hover {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent2);
     }
 
     .container {
         display: flex;
         width: 100%;
         min-height: 100vh;
+        padding-top: 20px;
+        box-sizing: border-box;
     }
 
     .left, .right {
@@ -57,7 +95,7 @@
 
     .left {
         background: var(--card);
-        border-right: 2px solid #3a0058;
+        border-right: 2px solid var(--border-color);
         padding-top: 80px;
     }
 
@@ -70,7 +108,7 @@
         font-size: 32px;
         text-align: center;
         color: var(--accent2);
-        text-shadow: 0 0 10px #a020f0;
+        text-shadow: 0 0 10px var(--accent);
     }
 
     .slider-container {
@@ -114,12 +152,12 @@
         margin-bottom: 14px;
     }
 
-    input {
+    input, select {
         flex-grow: 1;
         width: 100%;
         padding: 14px;
         border-radius: 6px;
-        border: none;
+        border: 1px solid var(--border-color);
         font-size: 16px;
         background: var(--slider-bg);
         color: var(--text);
@@ -172,8 +210,8 @@
 
     .fav-pair-btn {
         background: var(--slider-bg);
-        border: 1px solid #4a1570;
-        color: #553570;
+        border: 1px solid var(--border-color);
+        color: var(--text);
         font-size: 24px;
         cursor: pointer;
         padding: 0;
@@ -247,7 +285,7 @@
         margin-top: 0;
         font-size: 28px;
         color: var(--accent2);
-        text-shadow: 0 0 10px #a020f0;
+        text-shadow: 0 0 10px var(--accent);
     }
 
     /* =========================================
@@ -261,7 +299,8 @@
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 1.5px;
-        color: #9d80c0;
+        color: var(--text);
+        opacity: 0.8;
         margin-bottom: 12px;
         display: flex;
         justify-content: space-between;
@@ -274,11 +313,11 @@
         justify-content: center;
         gap: 12px;
         position: relative;
-        background: #140224;
-        border: 1px solid #33154d;
+        background: var(--card);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 15px 10px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     .carousel-container {
@@ -301,7 +340,7 @@
 
     .carousel-nav-btn {
         background: var(--slider-bg);
-        border: 1px solid #4a1570;
+        border: 1px solid var(--border-color);
         color: var(--text);
         font-size: 20px;
         border-radius: 50%;
@@ -333,13 +372,13 @@
     .card-currency {
         font-weight: bold;
         font-size: 16px;
-        color: #fff;
+        color: var(--text);
     }
 
     .card-category-badge {
         font-size: 10px;
         text-transform: uppercase;
-        background: #3a1c5c;
+        background: var(--slider-bg);
         padding: 2px 6px;
         border-radius: 4px;
         color: var(--accent2);
@@ -363,7 +402,8 @@
         justify-content: center;
         width: 24px;
         height: 24px;
-        color: #9d80c0;
+        color: var(--text);
+        opacity: 0.7;
         font-size: 14px;
         transition: color 0.2s;
     }
@@ -371,10 +411,11 @@
     .card-action-btn:hover {
         color: var(--accent2);
         background: none;
+        opacity: 1;
     }
 
     .card-action-btn.delete:hover {
-        color: #ff3333;
+        color: var(--danger);
     }
 
     .card-rate {
@@ -386,7 +427,7 @@
 
     .card-inverse-rate {
         font-size: 12px;
-        color: #9d80c0;
+        opacity: 0.8;
         margin-bottom: 10px;
     }
 
@@ -400,7 +441,7 @@
     .carousel-dot {
         width: 6px;
         height: 6px;
-        background: #3a1c5c;
+        background: var(--border-color);
         border-radius: 50%;
         transition: background 0.3s;
         cursor: pointer;
@@ -417,7 +458,8 @@
     .utility-box {
         margin-top: 10px;
         padding: 20px;
-        background: #1d0030;
+        background: var(--card);
+        border: 1px solid var(--border-color);
         border-radius: 10px;
         flex-grow: 1;
         overflow-y: auto;
@@ -438,7 +480,7 @@
         padding: 10px;
         font-size: 13px;
         background: var(--slider-bg);
-        border: 1px solid #4a1570;
+        border: 1px solid var(--border-color);
         color: var(--text);
         border-radius: 6px;
         cursor: pointer;
@@ -447,6 +489,7 @@
     .utility-tab-btn.active {
         background: var(--accent);
         border-color: var(--accent2);
+        color: #fff;
         box-shadow: 0 0 8px var(--accent);
     }
 
@@ -465,7 +508,7 @@
     .hub-table th, .hub-table td {
         padding: 8px;
         text-align: left;
-        border-bottom: 1px solid #33154d;
+        border-bottom: 1px solid var(--border-color);
     }
 
     .hub-table th {
@@ -477,7 +520,7 @@
     }
 
     .hub-table tr:hover {
-        background: rgba(160, 32, 240, 0.1);
+        background: rgba(160, 32, 240, 0.05);
     }
 
     .hub-load-btn {
@@ -488,6 +531,31 @@
         margin: 0;
         width: auto;
         display: inline-block;
+        color: #fff;
+        border: none;
+        font-weight: bold;
+    }
+
+    /* Manual Record Action Panel */
+    .record-action-container {
+        display: none;
+        margin-bottom: 12px;
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    .record-btn {
+        background: var(--success);
+        margin-bottom: 0;
+    }
+
+    .record-btn:hover {
+        background: #059669;
+    }
+
+    .record-btn:disabled {
+        background: #34495e !important;
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     /* Real-Time Sparkline styling */
@@ -502,8 +570,168 @@
     .empty-prompt {
         padding: 20px;
         font-style: italic;
-        color: #8a6da6;
+        opacity: 0.7;
         text-align: center;
+    }
+
+    /* =========================================
+        SETTINGS OVERLAY MODAL
+       ========================================= */
+    .settings-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .settings-panel {
+        background: var(--card);
+        border: 2px solid var(--border-color);
+        border-radius: 14px;
+        width: 90%;
+        max-width: 500px;
+        padding: 25px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+
+    .settings-title {
+        font-size: 22px;
+        color: var(--accent2);
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .settings-close {
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: var(--text);
+        cursor: pointer;
+        padding: 0;
+        width: auto;
+        margin: 0;
+    }
+
+    .setting-group {
+        margin-bottom: 18px;
+    }
+
+    .setting-label {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: var(--text);
+        display: block;
+    }
+
+    .theme-button-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .theme-btn {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        padding: 10px 0;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 0;
+        transition: all 0.2s ease;
+    }
+
+    .theme-btn.active {
+        background: var(--accent);
+        border-color: var(--accent2);
+        color: #fff;
+    }
+
+    .custom-color-row {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .custom-color-input {
+        width: 44px;
+        height: 34px;
+        padding: 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background: none;
+    }
+
+    .plot-setting-options {
+        display: flex;
+        gap: 12px;
+    }
+
+    .plot-opt {
+        flex: 1;
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        padding: 12px;
+        border-radius: 6px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .plot-opt.active {
+        background: var(--accent);
+        border-color: var(--accent2);
+        color: #fff;
+    }
+
+    .reset-btn {
+        background: var(--danger);
+        margin-top: 10px;
+    }
+
+    .reset-btn:hover {
+        background: #dc2626;
+    }
+
+    /* Notification banner */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: var(--card);
+        border-left: 5px solid var(--accent);
+        padding: 12px 24px;
+        border-radius: 4px;
+        color: var(--text);
+        box-shadow: 0 4px 12px var(--shadow-color);
+        display: none;
+        z-index: 1000;
+        animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
 
     /* =========================================
@@ -517,7 +745,7 @@
 
         .left {
             border-right: none;
-            border-bottom: 2px solid #3a0058;
+            border-bottom: 2px solid var(--border-color);
             padding: 70px 20px 30px 20px;
         }
 
@@ -525,20 +753,13 @@
             padding: 30px 20px;
         }
 
-        .logo {
-            font-size: 20px;
-            width: 100%;
-            text-align: center;
-            left: 0;
-            top: 15px;
-            background: rgba(10, 0, 20, 0.9);
-            padding: 10px 0;
-            backdrop-filter: blur(5px);
+        .header-bar {
+            background: var(--bg);
+            padding: 10px 15px;
         }
 
-        .tab {
-            font-size: 12px;
-            padding: 8px 0;
+        .logo {
+            font-size: 20px;
         }
     }
 </style>
@@ -546,7 +767,10 @@
 
 <body>
 
-<div class="logo">M€₺RIC by LUXWORLD+</div>
+<div class="header-bar">
+    <div class="logo">M€₺RIC by LUXWORLD+</div>
+    <button class="settings-trigger" id="openSettingsBtn">⚙️ Settings</button>
+</div>
 
 <div class="container">
 
@@ -562,7 +786,6 @@
             <div class="tab" onclick="setCategory('Temp', 4)">Temp</div>
         </div>
 
-        <!-- Wrapped in input-row to match layouts -->
         <div class="input-row">
             <input id="amount" type="number" placeholder="Amount">
         </div>
@@ -573,7 +796,7 @@
         </div>
 
         <div class="local-helper" id="localHelper">
-            <span style="color: #9d80c0;">Not your local currency?</span>
+            <span style="color: var(--text); opacity: 0.8;">Not your local currency?</span>
             <button id="useDetectedLocalCurrency" class="local-helper-btn">Change it to <span id="detectedLocalCode">USD</span></button>
         </div>
 
@@ -584,8 +807,8 @@
 
         <div class="convert-row">
             <button id="convert" class="convert-btn">Convert</button>
-            <button id="swapBtn" class="fav-pair-btn" title="Swap From and To inputs">⇅</button>
-            <button id="favPairBtn" class="fav-pair-btn" title="Add this exact pair to your favorites">★</button>
+            <button id="swapBtn" class="fav-pair-btn" title="Swap inputs">⇅</button>
+            <button id="favPairBtn" class="fav-pair-btn" title="Add pair to favorites">★</button>
         </div>
 
         <div id="result"></div>
@@ -617,9 +840,14 @@
         <h2 id="hubTitle">Performance & Logs</h2>
 
         <div class="utility-box">
+            <!-- Manual plotting trigger section -->
+            <div class="record-action-container" id="recordActionContainer">
+                <button id="recordCurrentRatesBtn" class="record-btn" title="Log current currency rates to history log">📈 Record Current Rates as Session</button>
+            </div>
+
             <div class="utility-header">
                 <button id="tabFavorites" class="utility-tab-btn active">📋 Registry & Inverses</button>
-                <button id="tabHistory" class="utility-tab-btn">🕒 Session History (Last 7)</button>
+                <button id="tabHistory" class="utility-tab-btn">🕒 Session History</button>
             </div>
             <div class="panel-view" id="panelView">
                 <!-- Swapped dynamic content displays here -->
@@ -628,6 +856,60 @@
     </div>
 
 </div>
+
+<!-- SETTINGS MODAL -->
+<div class="settings-modal" id="settingsModal">
+    <div class="settings-panel">
+        <div class="settings-title">
+            <span>⚙️ Configuration Board</span>
+            <button class="settings-close" id="closeSettingsBtn">&times;</button>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Visual Interface Palette</label>
+            <div class="theme-button-grid">
+                <button class="theme-btn" id="themePink">Pink</button>
+                <button class="theme-btn" id="themeWhite">White</button>
+                <button class="theme-btn" id="themeBlack">Black</button>
+                <button class="theme-btn" id="themeCustom">Custom</button>
+            </div>
+            <div class="custom-color-row" id="customColorRow">
+                <span style="font-size: 13px;">Accent Color:</span>
+                <input type="color" class="custom-color-input" id="customAccentPicker" value="#a020f0">
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Session Plotting Sequence</label>
+            <div class="plot-setting-options">
+                <div class="plot-opt" id="plotOptAuto" title="Automatically save snapshot on startup">Auto Plot</div>
+                <div class="plot-opt" id="plotOptManual" title="Plot manually via utility button">Manual Plot</div>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">Default Landing Section</label>
+            <select id="startSectionSelect">
+                <option value="Currency">Currency</option>
+                <option value="Length">Length</option>
+                <option value="Weight">Weight</option>
+                <option value="Volume">Volume</option>
+                <option value="Temp">Temp</option>
+            </select>
+        </div>
+
+        <div class="setting-group">
+            <label class="setting-label">History Snapshot Cap</label>
+            <input type="number" id="historyCapInput" min="3" max="15" value="7">
+        </div>
+
+        <div class="setting-group" style="margin-top: 30px;">
+            <button class="reset-btn" id="resetSystemBtn">⚠️ Reset Cache & Defaults</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toastMessage">Logged current session successfully!</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -652,28 +934,59 @@ document.addEventListener("DOMContentLoaded", () => {
     const detectedLocalCodeSpan = document.getElementById("detectedLocalCode");
     const useDetectedLocalCurrencyBtn = document.getElementById("useDetectedLocalCurrency");
     
+    // Utilities Header Tab Controls
     const tabFavorites = document.getElementById("tabFavorites");
     const tabHistory = document.getElementById("tabHistory");
     const panelView = document.getElementById("panelView");
+    const recordActionContainer = document.getElementById("recordActionContainer");
+    const recordCurrentRatesBtn = document.getElementById("recordCurrentRatesBtn");
 
+    // Settings elements
+    const openSettingsBtn = document.getElementById("openSettingsBtn");
+    const closeSettingsBtn = document.getElementById("closeSettingsBtn");
+    const settingsModal = document.getElementById("settingsModal");
+    const customAccentPicker = document.getElementById("customAccentPicker");
+    const customColorRow = document.getElementById("customColorRow");
+    const startSectionSelect = document.getElementById("startSectionSelect");
+    const historyCapInput = document.getElementById("historyCapInput");
+    const resetSystemBtn = document.getElementById("resetSystemBtn");
+    const toastMessage = document.getElementById("toastMessage");
+
+    // Settings elements theme selection
+    const themePink = document.getElementById("themePink");
+    const themeWhite = document.getElementById("themeWhite");
+    const themeBlack = document.getElementById("themeBlack");
+    const themeCustom = document.getElementById("themeCustom");
+
+    // Settings elements manual/auto plotting options
+    const plotOptAuto = document.getElementById("plotOptAuto");
+    const plotOptManual = document.getElementById("plotOptManual");
+
+    // Loaded configuration states (from localStorage)
     let currentCategory = localStorage.getItem("metric_category") || "Currency";
     let currencyList = [];
     let latestRates = {}; // Store USD base rates for global calculations
     let detectedLocalCurrency = "USD"; // Holds geo-IP detected currency
 
-    // Empty favorites by default - filter out any legacy non-currencies if there are any
+    // Filter out legacy configurations
     let rawFavorites = JSON.parse(localStorage.getItem("metric_favorites_pairs")) || [];
     let favorites = rawFavorites.filter(key => key.includes("|") && key.startsWith("Currency|"));
     localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
 
-    // Session log of last 7 opens
+    // History Snapshots & configuration defaults
     let sessionHistory = JSON.parse(localStorage.getItem("metric_session_history")) || [];
-
     let currentTrendIndex = 0;
     let autoplayInterval = null;
     let activeHubTab = "favorites"; // "favorites" or "history"
 
-    // Conversion Data
+    // Configuration System Defaults
+    let activeTheme = localStorage.getItem("metric_theme") || "pink";
+    let customAccentHex = localStorage.getItem("metric_custom_accent") || "#a020f0";
+    let plottingMode = localStorage.getItem("metric_plotting_mode") || "auto"; // "auto" or "manual"
+    let defaultStartingTab = localStorage.getItem("metric_start_tab") || "Currency";
+    let sessionCap = parseInt(localStorage.getItem("metric_session_cap")) || 7;
+
+    // Conversion Data Unit definitions
     const units = {
         Length: {
             "Meters": 1,
@@ -722,6 +1035,180 @@ document.addEventListener("DOMContentLoaded", () => {
         "Temp": 4
     };
 
+    // Dynamic Accent lightener formula to yield matching color accents
+    function lightenHex(hex, percent) {
+        let num = parseInt(hex.replace("#",""), 16),
+            amt = Math.round(2.55 * percent),
+            R = (num >> 16) + amt,
+            G = (num >> 8 & 0x00FF) + amt,
+            B = (num & 0x0000FF) + amt;
+        return "#" + (0x1000000 + (R < 255 ? R < 0 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 0 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 0 ? 0 : B : 255)).toString(16).slice(1);
+    }
+
+    // Dynamic Theme Injector Engine
+    function applyTheme(themeName, customColor = null) {
+        activeTheme = themeName;
+        localStorage.setItem("metric_theme", themeName);
+        
+        // Remove active markers on theme picker elements
+        [themePink, themeWhite, themeBlack, themeCustom].forEach(btn => btn.classList.remove("active"));
+        customColorRow.style.display = "none";
+
+        if (themeName === "pink") {
+            themePink.classList.add("active");
+            document.documentElement.style.setProperty('--bg', '#0a0014');
+            document.documentElement.style.setProperty('--card', '#150022');
+            document.documentElement.style.setProperty('--text', '#e6d6ff');
+            document.documentElement.style.setProperty('--accent', '#a020f0');
+            document.documentElement.style.setProperty('--accent2', '#d46bff');
+            document.documentElement.style.setProperty('--slider-bg', '#2a0040');
+            document.documentElement.style.setProperty('--border-color', '#3a0058');
+            document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.4)');
+        } 
+        else if (themeName === "white") {
+            themeWhite.classList.add("active");
+            document.documentElement.style.setProperty('--bg', '#f5f3f8');
+            document.documentElement.style.setProperty('--card', '#ffffff');
+            document.documentElement.style.setProperty('--text', '#201035');
+            document.documentElement.style.setProperty('--accent', '#813bf6');
+            document.documentElement.style.setProperty('--accent2', '#c04ff2');
+            document.documentElement.style.setProperty('--slider-bg', '#eae2f6');
+            document.documentElement.style.setProperty('--border-color', '#d0c4e8');
+            document.documentElement.style.setProperty('--shadow-color', 'rgba(100, 80, 120, 0.15)');
+        } 
+        else if (themeName === "black") {
+            themeBlack.classList.add("active");
+            document.documentElement.style.setProperty('--bg', '#000000');
+            document.documentElement.style.setProperty('--card', '#0e0e0e');
+            document.documentElement.style.setProperty('--text', '#f2ebff');
+            document.documentElement.style.setProperty('--accent', '#7c1ed4');
+            document.documentElement.style.setProperty('--accent2', '#bd64ff');
+            document.documentElement.style.setProperty('--slider-bg', '#181525');
+            document.documentElement.style.setProperty('--border-color', '#26213a');
+            document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.8)');
+        } 
+        else if (themeName === "custom") {
+            themeCustom.classList.add("active");
+            customColorRow.style.display = "flex";
+            const hex = customColor || customAccentHex;
+            customAccentHex = hex;
+            localStorage.setItem("metric_custom_accent", hex);
+            
+            const accent2 = lightenHex(hex, 25);
+            const sliderBg = lightenHex(hex, -55);
+            const borderCol = lightenHex(hex, -40);
+
+            document.documentElement.style.setProperty('--bg', '#07020d');
+            document.documentElement.style.setProperty('--card', '#11061f');
+            document.documentElement.style.setProperty('--text', '#f1e6ff');
+            document.documentElement.style.setProperty('--accent', hex);
+            document.documentElement.style.setProperty('--accent2', accent2);
+            document.documentElement.style.setProperty('--slider-bg', sliderBg);
+            document.documentElement.style.setProperty('--border-color', borderCol);
+            document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.5)');
+        }
+    }
+
+    // Modal Control Handlers
+    openSettingsBtn.addEventListener("click", () => {
+        // Load configurations into input nodes prior to visual layout paint
+        startSectionSelect.value = defaultStartingTab;
+        historyCapInput.value = sessionCap;
+        customAccentPicker.value = customAccentHex;
+        
+        // Match active plotting toggle
+        if (plottingMode === "auto") {
+            plotOptAuto.classList.add("active");
+            plotOptManual.classList.remove("active");
+        } else {
+            plotOptAuto.classList.remove("active");
+            plotOptManual.classList.add("active");
+        }
+
+        settingsModal.style.display = "flex";
+    });
+
+    closeSettingsBtn.addEventListener("click", () => {
+        settingsModal.style.display = "none";
+    });
+
+    settingsModal.addEventListener("click", (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.style.display = "none";
+        }
+    });
+
+    // Theme Picker events
+    themePink.addEventListener("click", () => applyTheme("pink"));
+    themeWhite.addEventListener("click", () => applyTheme("white"));
+    themeBlack.addEventListener("click", () => applyTheme("black"));
+    themeCustom.addEventListener("click", () => applyTheme("custom"));
+    customAccentPicker.addEventListener("input", (e) => applyTheme("custom", e.target.value));
+
+    // Plot Mode Toggles
+    plotOptAuto.addEventListener("click", () => {
+        plottingMode = "auto";
+        localStorage.setItem("metric_plotting_mode", "auto");
+        plotOptAuto.classList.add("active");
+        plotOptManual.classList.remove("active");
+        configurePlottingControls();
+    });
+
+    plotOptManual.addEventListener("click", () => {
+        plottingMode = "manual";
+        localStorage.setItem("metric_plotting_mode", "manual");
+        plotOptAuto.classList.remove("active");
+        plotOptManual.classList.add("active");
+        configurePlottingControls();
+    });
+
+    // Landing settings changes
+    startSectionSelect.addEventListener("change", (e) => {
+        defaultStartingTab = e.target.value;
+        localStorage.setItem("metric_start_tab", defaultStartingTab);
+    });
+
+    historyCapInput.addEventListener("input", (e) => {
+        let cap = parseInt(e.target.value);
+        if (isNaN(cap) || cap < 3) cap = 3;
+        if (cap > 15) cap = 15;
+        sessionCap = cap;
+        localStorage.setItem("metric_session_cap", cap);
+    });
+
+    // Full system hardware reset trigger
+    resetSystemBtn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to clear your local database, favorites, and history snapshots?")) {
+            localStorage.clear();
+            location.reload();
+        }
+    });
+
+    function showToast(message) {
+        toastMessage.textContent = message;
+        toastMessage.style.display = "block";
+        setTimeout(() => {
+            toastMessage.style.display = "none";
+        }, 3000);
+    }
+
+    // Evaluate plotting UI options
+    function configurePlottingControls() {
+        if (plottingMode === "manual" && activeHubTab === "history") {
+            recordActionContainer.style.display = "block";
+            // Disable plotting button if the user is not viewing Currency
+            if (currentCategory === "Currency") {
+                recordCurrentRatesBtn.disabled = false;
+                recordCurrentRatesBtn.title = "Log current currency rates to history log";
+            } else {
+                recordCurrentRatesBtn.disabled = true;
+                recordCurrentRatesBtn.title = "Can only record historical data when using Currency category";
+            }
+        } else {
+            recordActionContainer.style.display = "none";
+        }
+    }
+
     function saveState() {
         localStorage.setItem("metric_category", currentCategory);
         localStorage.setItem("metric_amount", amountInput.value);
@@ -767,7 +1254,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const toVal = toInput.value;
         const currentKey = getPairKey(currentCategory, fromVal, toVal);
 
-        // Star button is only functional and shown in currency mode
         if (currentCategory === "Currency") {
             favPairBtn.style.display = "flex";
             if (favorites.includes(currentKey)) {
@@ -781,7 +1267,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function toggleFavoriteCurrentPair() {
-        // Users can only favorite Currency
         if (currentCategory !== "Currency") return;
 
         const fromVal = fromInput.value;
@@ -813,7 +1298,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!latestRates[from] || !latestRates[to]) return "N/A";
             return (latestRates[to] / latestRates[from]).toFixed(4);
         } else if (category === "Temp") {
-            return "Convertible";
+            return "Convert";
         } else {
             const baseRates = units[category];
             if (!baseRates || !baseRates[from] || !baseRates[to]) return "N/A";
@@ -822,8 +1307,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Render historical trend lines from session logs
     function generateRealHistorySparkline(favKey) {
-        // Gather historical rates from session snapshots from oldest to newest
         let historyRates = sessionHistory
             .slice()
             .reverse()
@@ -832,7 +1317,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const fallbackRate = parseFloat(calculateLiveRate("Currency", parsePairKey(favKey).from, parsePairKey(favKey).to));
 
-        // If we have less than 2 data points, inject the fallback rate to make a stable flat line
         if (historyRates.length === 0) {
             historyRates = [fallbackRate, fallbackRate];
         } else if (historyRates.length === 1) {
@@ -847,10 +1331,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const maxY = Math.max(...historyRates);
         const range = maxY - minY || 1;
 
-        // Scale coordinates to fit viewBox="0 0 100 25"
         const points = historyRates.map((rate, i) => {
             const x = (i / (historyRates.length - 1)) * 100;
-            const y = 22 - ((rate - minY) / range) * 19; // Bound y with comfortable cushion inside 25px height
+            const y = 22 - ((rate - minY) / range) * 19; 
             return `${x.toFixed(1)},${y.toFixed(1)}`;
         }).join(" ");
 
@@ -922,7 +1405,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const liveRate = calculateLiveRate(category, from, to);
         const inverseRate = calculateLiveRate(category, to, from);
 
-        // Fetch the real trend slope built on the user's logged open sessions
         const trendData = generateRealHistorySparkline(favKey);
 
         const card = document.createElement("div");
@@ -942,7 +1424,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="card-rate">1 ${from} = ${liveRate}</div>
                     <div class="card-inverse-rate">1 ${to} = ${inverseRate}</div>
                 </div>
-                <!-- Interactive SVG slope demonstrating real trajectory changes -->
                 <svg viewBox="0 0 100 25" style="width: 80px; height: 24px; margin-bottom: 8px;">
                     <polyline points="${trendData.points}" style="fill:none; stroke:${trendData.isUp ? 'var(--success)' : 'var(--danger)'}; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 1.5px ${trendData.isUp ? 'var(--success)' : 'var(--danger)'})"></polyline>
                 </svg>
@@ -1035,6 +1516,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         saveState();
         updateFavoriteStars();
+        configurePlottingControls();
     }
 
     async function convert() {
@@ -1105,7 +1587,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return "USD";
     }
 
-    function recordSessionSnapshot() {
+    function recordSessionSnapshot(isManual = false) {
+        // Enforce manual check - only plot if currency is the active tab today
+        if (isManual && currentCategory !== "Currency") {
+            showToast("Can only record session rates while in Currency mode.");
+            return;
+        }
+
         const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         const dateStr = new Date().toLocaleDateString([], { month: 'short', day: 'numeric' });
         
@@ -1114,17 +1602,23 @@ document.addEventListener("DOMContentLoaded", () => {
             rates: {}
         };
 
-        // Record current conversion rates for each favorite pair
         favorites.forEach(favKey => {
             const { category, from, to } = parsePairKey(favKey);
             snapshot.rates[favKey] = calculateLiveRate(category, from, to);
         });
 
-        // Robust duplicate session logger filtering out identical loads/static values
+        // Do not add empty snapshot if there are no favorites
+        if (favorites.length === 0) {
+            if (isManual) {
+                showToast("Please star at least one currency pair first!");
+            }
+            return;
+        }
+
+        // De-duplication algorithm matching exact threshold shifts
         if (sessionHistory.length > 0) {
             const lastSession = sessionHistory[0];
             
-            // Compare list of tracked keys to check if composition is identical
             const lastKeys = Object.keys(lastSession.rates || {});
             const currentKeys = Object.keys(snapshot.rates);
             const keysChanged = lastKeys.length !== currentKeys.length || !currentKeys.every(k => lastKeys.includes(k));
@@ -1138,33 +1632,38 @@ document.addEventListener("DOMContentLoaded", () => {
                     const prevVal = parseFloat(lastSession.rates[favKey]);
                     const newVal = parseFloat(snapshot.rates[favKey]);
 
-                    // Check if the change is non-zero (greater than 0.0000 range)
                     if (!isNaN(prevVal) && !isNaN(newVal)) {
                         if (Math.abs(newVal - prevVal) > 0.00001) {
                             rateChanged = true;
                             break;
                         }
                     } else if (isNaN(prevVal) && !isNaN(newVal)) {
-                        // Protect against migrations or undefined entries (new favorites)
                         rateChanged = true;
                         break;
                     }
                 }
             }
 
-            // If rates are completely static across all favorites, skip recording this duplicate snapshot!
-            if (!rateChanged && favorites.length > 0) {
-                console.log("Ignored identical session to protect historical logs from duplicate opens.");
+            // Reject duplicate auto plot snapshots, but allow user overrides on manual plot
+            if (!rateChanged && !isManual) {
+                console.log("Ignored identical session to protect historical logs from duplicate auto-opens.");
                 return;
             }
         }
 
         sessionHistory.unshift(snapshot);
-        if (sessionHistory.length > 7) {
-            sessionHistory = sessionHistory.slice(0, 7);
+        // Bind length cap based on settings variable
+        if (sessionHistory.length > sessionCap) {
+            sessionHistory = sessionHistory.slice(0, sessionCap);
         }
 
         localStorage.setItem("metric_session_history", JSON.stringify(sessionHistory));
+        
+        if (isManual) {
+            showToast("Rates logged successfully!");
+            renderActivePanel();
+            renderTrendsCarousel();
+        }
     }
 
     function renderActivePanel() {
@@ -1231,14 +1730,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (sessionHistory.length === 0) {
-                panelView.innerHTML = `<div class="empty-prompt">No session logs captured. Reload the app to capture loading points.</div>`;
+                panelView.innerHTML = `<div class="empty-prompt">No session logs captured. Tap "Record Current Rates" to plot rates!</div>`;
                 return;
             }
 
             const table = document.createElement("table");
             table.className = "hub-table";
             
-            // Build columns for each favorite pair currently tracked
             let headerCells = `<th>Session Landmark</th>`;
             favorites.forEach(favKey => {
                 const { from, to } = parsePairKey(favKey);
@@ -1274,6 +1772,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function initCurrencies() {
         try {
+            // Apply loaded theme choices
+            applyTheme(activeTheme);
+
             const res = await fetch(API + "USD");
             const data = await res.json();
             currencyList = Object.keys(data.rates);
@@ -1300,6 +1801,11 @@ document.addEventListener("DOMContentLoaded", () => {
                               currentCategory === "Volume" ? "Liters" : "Celsius";
             }
 
+            // Read the Default Start Category setting if clean boot
+            if (!localStorage.getItem("metric_category") && defaultStartingTab) {
+                currentCategory = defaultStartingTab;
+            }
+
             const activeIndex = categoryIndexes[currentCategory] ?? 0;
             setCategory(currentCategory, activeIndex, false); 
 
@@ -1308,13 +1814,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 evalLocalCurrencyShortcut();
             }
 
-            // Capture snapshot load points (with robust duplicates removal logic)
-            recordSessionSnapshot();
+            // Plot automatically only if plot settings dictate "auto"
+            if (plottingMode === "auto") {
+                recordSessionSnapshot();
+            }
 
             updateFavoriteStars();
             renderTrendsCarousel();
             renderActivePanel();
             setupAutoplay();
+            configurePlottingControls();
 
         } catch (e) {
             resultBox.textContent = "Error loading currencies. Check network connection.";
@@ -1361,11 +1870,18 @@ document.addEventListener("DOMContentLoaded", () => {
     tabFavorites.addEventListener("click", () => {
         activeHubTab = "favorites";
         renderActivePanel();
+        configurePlottingControls();
     });
 
     tabHistory.addEventListener("click", () => {
         activeHubTab = "history";
         renderActivePanel();
+        configurePlottingControls();
+    });
+
+    // Manual snapshot plotting trigger
+    recordCurrentRatesBtn.addEventListener("click", () => {
+        recordSessionSnapshot(true);
     });
 
     document.getElementById("convert").addEventListener("click", convert);
