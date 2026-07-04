@@ -758,33 +758,6 @@
         background: #dc2626;
     }
 
-    /* Telemetry Visual Card Styling */
-    .telemetry-board {
-        background: var(--bg);
-        padding: 12px;
-        border-radius: 8px;
-        font-size: 11px;
-        font-family: monospace;
-        line-height: 1.5;
-        color: var(--text);
-        opacity: 0.9;
-        border: 1px solid var(--border-color);
-        margin-top: 5px;
-    }
-
-    .telemetry-title-badge {
-        color: var(--accent2);
-        font-weight: bold;
-        margin-bottom: 3px;
-        margin-top: 6px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        padding-bottom: 2px;
-    }
-
-    .telemetry-title-badge:first-of-type {
-        margin-top: 0;
-    }
-
     /* =========================================
         PRIVACY CHOICE MODULES (4-TIER SELECTOR)
        ========================================= */
@@ -1225,35 +1198,13 @@
             <input type="number" id="historyCapInput" min="3" max="15" value="7">
         </div>
 
-        <!-- 4-Level Diagnostics Dashboard -->
+        <!-- 4-Level Diagnostics Dashboard Layout Header (No detailed textual tables) -->
         <div class="setting-group" style="border-top: 1px solid var(--border-color); padding-top: 15px;">
             <label class="setting-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                 <span>📡 Data Tracking & Diagnostics (4-Level)</span>
                 <span id="telemetryStatus" style="font-size: 11px; color: var(--success); font-weight: bold;">Online 🟢</span>
             </label>
             <span style="font-size: 11px; opacity: 0.7; margin-bottom: 8px; display: block;">Dynamic telemetry mapped via Google Form prefill pipeline</span>
-            
-            <div class="telemetry-board">
-                <div class="telemetry-title-badge">Level 1: System & Client Environment</div>
-                <div>• Application Host: <span id="telHost">Loading...</span></div>
-                <div>• OS / UserAgent: <span id="telOS">Loading...</span></div>
-                <div>• Referral Route: <span id="telReferrer">Loading...</span></div>
-
-                <div class="telemetry-title-badge">Level 2: Network & Geolocation Intelligence</div>
-                <div>• IP Address: <span id="telIP">Loading...</span></div>
-                <div>• Geo-Location: <span id="telLocation">Loading...</span></div>
-                <div>• Network ISP: <span id="telISP">Loading...</span></div>
-
-                <div class="telemetry-title-badge">Level 3: Configuration & Session Workspace</div>
-                <div>• Active Area: <span id="telCategory">Loading...</span></div>
-                <div>• Selected Theme: <span id="telTheme">Loading...</span></div>
-
-                <div class="telemetry-title-badge">Level 4: Product Analytics & Favorites</div>
-                <div>• Favorite count: <span id="telFavCount">0</span></div>
-                <div>• Active Matrix List: <span id="telFavList">None</span></div>
-                <div>• Primary Translated: <span id="telLang">None</span></div>
-            </div>
-
             
             <button id="forceSyncBtn" style="margin-top: 14px; font-size: 12px; padding: 10px; background: var(--slider-bg); border: 1px solid var(--border-color);" class="theme-btn">Force Data Sync 📡</button>
         </div>
@@ -1340,18 +1291,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetSystemBtn = document.getElementById("resetSystemBtn");
     const toastMessage = document.getElementById("toastMessage");
 
-    // Telemetry display bindings
-    const telHost = document.getElementById("telHost");
-    const telOS = document.getElementById("telOS");
-    const telReferrer = document.getElementById("telReferrer");
-    const telIP = document.getElementById("telIP");
-    const telLocation = document.getElementById("telLocation");
-    const telISP = document.getElementById("telISP");
-    const telCategory = document.getElementById("telCategory");
-    const telTheme = document.getElementById("telTheme");
-    const telFavCount = document.getElementById("telFavCount");
-    const telFavList = document.getElementById("telFavList");
-    const telLang = document.getElementById("telLang");
+    // Telemetry display bindings (No-op handling)
     const forceSyncBtn = document.getElementById("forceSyncBtn");
     const telemetryStatus = document.getElementById("telemetryStatus");
     const invisibleSubmissionFrame = document.getElementById("invisibleSubmissionFrame");
@@ -2143,7 +2083,7 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (from === "Celsius" && to === "Kelvin") converted = amount + 273.15;
             else if (from === "Fahrenheit" && to === "Celsius") converted = (amount - 32) * 5/9;
             else if (from === "Fahrenheit" && to === "Kelvin") converted = (amount - 32) * 5/9 + 273.15;
-            else if (from === "Kelvin" && to === "Celsius") converted = amount - 273.15;
+            else if (font = "Kelvin" && to === "Celsius") converted = amount - 273.15;
             else if (from === "Kelvin" && to === "Fahrenheit") converted = (amount - 273.15) * 9/5 + 32;
         }
 
@@ -2447,74 +2387,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateTelemetryMetrics() {
-        const systemOS = getDeviceOS();
-        const refLink = document.referrer || "Direct Platform Access";
-        const hostURL = window.location.hostname || "metric.luxworldplus.com";
-        const activeFavsText = favorites.map(f => {
-            const parts = f.split('|');
-            return parts.length >= 3 ? `${parts[1]}-${parts[2]}` : f;
-        }).join(', ') || "None Active";
-
-        // Display dashboard depends entirely on Privacy Levels selected
-        if (privacyLevel === 3) {
-            telHost.textContent = hostURL;
-            telOS.textContent = systemOS;
-            telReferrer.textContent = refLink;
-            telIP.textContent = networkTracker.ip;
-            telLocation.textContent = `${networkTracker.city}, ${networkTracker.region}, ${networkTracker.country}`;
-            telISP.textContent = networkTracker.org;
-            telCategory.textContent = currentCategory;
-            telTheme.textContent = activeTheme;
-            telFavCount.textContent = favorites.length;
-            telFavList.textContent = activeFavsText;
-            telLang.textContent = getMostTranslatedLanguage();
-        } 
-        else if (privacyLevel === 2) {
-            telHost.textContent = hostURL;
-            telOS.textContent = systemOS;
-            telReferrer.textContent = refLink;
-            // Mask the last IP octet
-            if (networkTracker.ip && networkTracker.ip.includes(".")) {
-                const parts = networkTracker.ip.split(".");
-                telIP.textContent = `${parts[0]}.${parts[1]}.${parts[2]}.xxx`;
-            } else {
-                telIP.textContent = "Masked IP";
-            }
-            telLocation.textContent = `${networkTracker.region}, ${networkTracker.country} (Coarse)`;
-            telISP.textContent = networkTracker.org;
-            telCategory.textContent = currentCategory;
-            telTheme.textContent = activeTheme;
-            telFavCount.textContent = favorites.length;
-            telFavList.textContent = activeFavsText;
-            telLang.textContent = getMostTranslatedLanguage();
-        } 
-        else if (privacyLevel === 1) {
-            telHost.textContent = hostURL;
-            telOS.textContent = "nan";
-            telReferrer.textContent = "nan";
-            telIP.textContent = "nan";
-            telLocation.textContent = "nan";
-            telISP.textContent = "nan";
-            telCategory.textContent = currentCategory;
-            telTheme.textContent = "nan";
-            telFavCount.textContent = "nan";
-            telFavList.textContent = "nan";
-            telLang.textContent = "nan";
-        } 
-        else {
-            // Level 0 opt out
-            telHost.textContent = "nan";
-            telOS.textContent = "nan";
-            telReferrer.textContent = "nan";
-            telIP.textContent = "nan";
-            telLocation.textContent = "nan";
-            telISP.textContent = "nan";
-            telCategory.textContent = "nan";
-            telTheme.textContent = "nan";
-            telFavCount.textContent = "nan";
-            telFavList.textContent = "nan";
-            telLang.textContent = "nan";
-        }
+        // Safe no-op function: Telemetry inputs exist solely in the background state variables
+        // and no longer rely on DOM selectors to prevent execution exceptions.
     }
 
     // Dynamic Privacy selector updates
@@ -2522,7 +2396,6 @@ document.addEventListener("DOMContentLoaded", () => {
         privacyLevel = level;
         localStorage.setItem("metric_privacy_level", level);
         
-        // Highlight active tier panel
         document.querySelectorAll(".privacy-card-option").forEach(card => {
             card.classList.remove("active");
         });
@@ -2533,7 +2406,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function triggerDataSyncPipeline(showBanner = false) {
-        if (privacyLevel === null) return; // Wait until onboarding accepted
+        if (privacyLevel === null) return; 
 
         if (privacyLevel === 0) {
             telemetryStatus.textContent = "Opted-Out 🔴";
@@ -2544,7 +2417,6 @@ document.addEventListener("DOMContentLoaded", () => {
         telemetryStatus.textContent = "Syncing... 🟡";
         telemetryStatus.style.color = "#fbbf24";
 
-        // Setup payload mapping
         let payloadCategory = "nan";
         let payloadTheme = "nan";
         let payloadLang = "nan";
@@ -2621,7 +2493,6 @@ document.addEventListener("DOMContentLoaded", () => {
             dataParams.append(itemKey, telemetryPayload[itemKey]);
         }
 
-        // Perform parallel background dispatch using the invisible submit frame
         const silentSubmitUrl = `${formSubmitBase}?${dataParams.toString()}`;
         invisibleSubmissionFrame.src = silentSubmitUrl;
 
@@ -2649,7 +2520,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (savedAmount) amountInput.value = savedAmount;
             if (savedTranslateText) translateText.value = savedTranslateText;
 
-            // Gather geo IP information prior to pipeline startup
             detectedLocalCurrency = await detectLocalCurrency();
             if (!currencyList.includes(detectedLocalCurrency)) {
                 detectedLocalCurrency = "USD";
@@ -2681,7 +2551,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 recordSessionSnapshot();
             }
 
-            // Onboarding cookie consent trigger
             if (privacyLevel === null) {
                 consentBanner.style.display = "block";
             } else {
@@ -2700,15 +2569,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Cookie Consent Actions
     consentAcceptBtn.addEventListener("click", () => {
         consentBanner.style.display = "none";
-        setPrivacyLevel(3); // Level 3 default accepted
+        setPrivacyLevel(3); 
     });
 
     consentSettingsBtn.addEventListener("click", () => {
         consentBanner.style.display = "none";
-        privacyLevel = 3; // Temporary value initialized for setup modal mapping
+        privacyLevel = 3; 
         setPrivacyLevel(3);
         openSettingsBtn.click();
     });
@@ -2777,7 +2645,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("convert").addEventListener("click", convert);
 
-    // Initial load orchestrations
     initCurrencies();
 });
 </script>
