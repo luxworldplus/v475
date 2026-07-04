@@ -129,7 +129,7 @@
         color: var(--text);
         z-index: 1;
         transition: color 0.3s;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .slider-highlight {
@@ -137,7 +137,7 @@
         top: 5px;
         bottom: 5px;
         left: 5px;
-        width: calc(20% - 2px);
+        width: calc(16.66% - 2px);
         background: var(--accent);
         border-radius: 6px;
         transition: transform 0.3s ease;
@@ -152,7 +152,7 @@
         margin-bottom: 14px;
     }
 
-    input, select {
+    input, select, textarea {
         flex-grow: 1;
         width: 100%;
         padding: 14px;
@@ -162,7 +162,22 @@
         background: var(--slider-bg);
         color: var(--text);
         box-sizing: border-box;
+    }
+
+    input {
         height: 52px;
+    }
+
+    textarea {
+        height: 110px;
+        resize: none;
+        outline: none;
+        font-family: inherit;
+        transition: border-color 0.2s;
+    }
+
+    textarea:focus {
+        border-color: var(--accent2);
     }
 
     input[type=number]::-webkit-inner-spin-button, 
@@ -201,11 +216,6 @@
     .local-helper-btn:hover {
         color: #fff;
         background: none;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-4px); }
-        to { opacity: 1; transform: translateY(0); }
     }
 
     .fav-pair-btn {
@@ -558,20 +568,53 @@
         opacity: 0.6;
     }
 
-    /* Real-Time Sparkline styling */
-    .trend-sparkline-mini {
-        width: 60px;
-        height: 20px;
-        stroke: var(--success);
-        stroke-width: 1.5;
-        fill: none;
-    }
-
     .empty-prompt {
         padding: 20px;
         font-style: italic;
         opacity: 0.7;
         text-align: center;
+    }
+
+    .trans-card {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 10px;
+        position: relative;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .trans-card:hover {
+        border-color: var(--accent2);
+        box-shadow: 0 4px 12px rgba(160, 32, 240, 0.1);
+    }
+
+    .trans-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+        font-size: 11px;
+        font-weight: bold;
+        color: var(--accent2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .trans-card-text {
+        font-size: 13px;
+        color: var(--text);
+        margin-bottom: 4px;
+        word-break: break-word;
+        opacity: 0.9;
+    }
+
+    .trans-card-translation {
+        font-size: 13px;
+        font-weight: bold;
+        color: #fff;
+        word-break: break-word;
     }
 
     /* =========================================
@@ -596,11 +639,13 @@
         background: var(--card);
         border: 2px solid var(--border-color);
         border-radius: 14px;
-        width: 90%;
+        width: 95%;
         max-width: 500px;
         padding: 25px;
         box-sizing: border-box;
         box-shadow: 0 10px 30px var(--shadow-color);
+        max-height: 90vh;
+        overflow-y: auto;
     }
 
     .settings-title {
@@ -713,7 +758,219 @@
         background: #dc2626;
     }
 
-    /* Notification banner */
+    /* Telemetry Visual Card Styling */
+    .telemetry-board {
+        background: var(--bg);
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-family: monospace;
+        line-height: 1.5;
+        color: var(--text);
+        opacity: 0.9;
+        border: 1px solid var(--border-color);
+        margin-top: 5px;
+    }
+
+    .telemetry-title-badge {
+        color: var(--accent2);
+        font-weight: bold;
+        margin-bottom: 3px;
+        margin-top: 6px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding-bottom: 2px;
+    }
+
+    .telemetry-title-badge:first-of-type {
+        margin-top: 0;
+    }
+
+    /* =========================================
+        PRIVACY CHOICE MODULES (4-TIER SELECTOR)
+       ========================================= */
+    .privacy-card-option {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .privacy-card-option:hover {
+        border-color: var(--accent2);
+    }
+
+    .privacy-card-option.active {
+        border-color: var(--success);
+        background: rgba(16, 185, 129, 0.08);
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
+    }
+
+    .privacy-card-option-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .privacy-card-badge {
+        font-size: 9px;
+        text-transform: uppercase;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .privacy-card-badge.level-3 { background: #10b981; color: #fff; }
+    .privacy-card-badge.level-2 { background: #3b82f6; color: #fff; }
+    .privacy-card-badge.level-1 { background: #f59e0b; color: #fff; }
+    .privacy-card-badge.level-0 { background: #ef4444; color: #fff; }
+
+    .privacy-card-desc {
+        font-size: 11px;
+        opacity: 0.8;
+        line-height: 1.4;
+    }
+
+    /* =========================================
+        FLOATING CONSENT BANNER
+       ========================================= */
+    .consent-banner {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 320px;
+        background: var(--card);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 30px var(--shadow-color);
+        z-index: 999;
+        display: none;
+        animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .consent-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: var(--accent2);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .consent-desc {
+        font-size: 11px;
+        opacity: 0.9;
+        line-height: 1.4;
+        margin-bottom: 12px;
+    }
+
+    .consent-buttons {
+        display: flex;
+        gap: 8px;
+    }
+
+    .consent-btn-accept {
+        background: var(--accent);
+        font-size: 11px;
+        padding: 8px;
+        margin: 0;
+    }
+
+    .consent-btn-settings {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        font-size: 11px;
+        padding: 8px;
+        margin: 0;
+    }
+
+    .consent-btn-settings:hover {
+        background: var(--accent);
+        color: #fff;
+    }
+
+    /* =========================================
+        CUSTOM CONFIRMATION DIALOG MODAL
+       ========================================= */
+    .confirm-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    .confirm-panel {
+        background: var(--card);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+        box-sizing: border-box;
+        box-shadow: 0 10px 25px var(--shadow-color);
+        text-align: center;
+    }
+
+    .confirm-title {
+        font-size: 18px;
+        color: var(--danger);
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .confirm-desc {
+        font-size: 13px;
+        margin-bottom: 20px;
+        line-height: 1.4;
+    }
+
+    .confirm-row {
+        display: flex;
+        gap: 10px;
+    }
+
+    .confirm-action-btn {
+        flex: 1;
+        margin: 0;
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .confirm-cancel {
+        background: var(--slider-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text);
+    }
+
+    .confirm-cancel:hover {
+        background: var(--border-color);
+    }
+
+    .confirm-proceed {
+        background: var(--danger);
+    }
+
+    .confirm-proceed:hover {
+        background: #dc2626;
+    }
+
     .toast {
         position: fixed;
         bottom: 20px;
@@ -734,9 +991,11 @@
         to { transform: translateY(0); opacity: 1; }
     }
 
-    /* =========================================
-        MOBILE RESPONSIVENESS
-       ========================================= */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 768px) {
         .container {
             flex-direction: column;
@@ -761,6 +1020,20 @@
         .logo {
             font-size: 20px;
         }
+
+        .slider-container {
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1 1 33.33%;
+            font-size: 11px;
+            padding: 8px 0;
+        }
+
+        .slider-highlight {
+            display: none;
+        }
     }
 </style>
 </head>
@@ -784,10 +1057,16 @@
             <div class="tab" onclick="setCategory('Weight', 2)">Weight</div>
             <div class="tab" onclick="setCategory('Volume', 3)">Volume</div>
             <div class="tab" onclick="setCategory('Temp', 4)">Temp</div>
+            <div class="tab" onclick="setCategory('Translate', 5)">Translate</div>
         </div>
 
         <div class="input-row">
             <input id="amount" type="number" placeholder="Amount">
+        </div>
+
+        <!-- Integrated Translation Input Textbox -->
+        <div class="input-row" id="translateTextRow" style="display: none;">
+            <textarea id="translateText" placeholder="Enter text to translate..."></textarea>
         </div>
         
         <div class="input-row">
@@ -809,6 +1088,7 @@
             <button id="convert" class="convert-btn">Convert</button>
             <button id="swapBtn" class="fav-pair-btn" title="Swap inputs">⇅</button>
             <button id="favPairBtn" class="fav-pair-btn" title="Add pair to favorites">★</button>
+            <button id="copyTranslateBtn" class="fav-pair-btn" title="Copy Translation" style="display: none;">📋</button>
         </div>
 
         <div id="result"></div>
@@ -853,11 +1133,19 @@
                 <!-- Swapped dynamic content displays here -->
             </div>
         </div>
+
+        <!-- Saved Translation Board below logs -->
+        <h2 id="savedTransTitle" style="margin-top: 30px; font-size: 28px; color: var(--accent2); text-shadow: 0 0 10px var(--accent);">Saved Translations</h2>
+        <div class="utility-box" style="min-height: 200px; margin-top: 10px; max-height: 320px;">
+            <div class="panel-view" id="translationFavView">
+                <!-- Translation favorites load here -->
+            </div>
+        </div>
     </div>
 
 </div>
 
-<!-- SETTINGS MODAL -->
+<!-- SETTINGS MODAL & TELEMETRY DASHBOARD -->
 <div class="settings-modal" id="settingsModal">
     <div class="settings-panel">
         <div class="settings-title">
@@ -879,6 +1167,39 @@
             </div>
         </div>
 
+        <!-- Integrated 4-Tier Privacy Protection Selector -->
+        <div class="setting-group" style="border-top: 1px solid var(--border-color); padding-top: 15px;">
+            <label class="setting-label">Privacy & Diagnostic Level</label>
+            <div class="privacy-card-option" id="privacyLevel3" onclick="setPrivacyLevel(3)">
+                <div class="privacy-card-option-header">
+                    <span>Level 3: Full Customization</span>
+                    <span class="privacy-card-badge level-3">Recommended</span>
+                </div>
+                <div class="privacy-card-desc">Transmits IP address, coarse location/ISP, play logs, configurations, and system metrics.</div>
+            </div>
+            <div class="privacy-card-option" id="privacyLevel2" onclick="setPrivacyLevel(2)">
+                <div class="privacy-card-option-header">
+                    <span>Level 2: Balanced Analytics</span>
+                    <span class="privacy-card-badge level-2">Balanced</span>
+                </div>
+                <div class="privacy-card-desc">Masks the last octet of IP addresses. Stores generic regional location and functional app logs.</div>
+            </div>
+            <div class="privacy-card-option" id="privacyLevel1" onclick="setPrivacyLevel(1)">
+                <div class="privacy-card-option-header">
+                    <span>Level 1: Strictly Functional</span>
+                    <span class="privacy-card-badge level-1">Minimal</span>
+                </div>
+                <div class="privacy-card-desc">IP address, precise locations, and device details are kept completely anonymous (sent as "nan"). Only functional actions are mapped.</div>
+            </div>
+            <div class="privacy-card-option" id="privacyLevel0" onclick="setPrivacyLevel(0)">
+                <div class="privacy-card-option-header">
+                    <span>Level 0: Complete Privacy (Opt-Out)</span>
+                    <span class="privacy-card-badge level-0">Disabled</span>
+                </div>
+                <div class="privacy-card-desc">Deactivates all diagnostic background pipelines. Absolutely no telemetry metadata is compiled.</div>
+            </div>
+        </div>
+
         <div class="setting-group">
             <label class="setting-label">Session Plotting Sequence</label>
             <div class="plot-setting-options">
@@ -895,6 +1216,7 @@
                 <option value="Weight">Weight</option>
                 <option value="Volume">Volume</option>
                 <option value="Temp">Temp</option>
+                <option value="Translate">Translate</option>
             </select>
         </div>
 
@@ -903,11 +1225,73 @@
             <input type="number" id="historyCapInput" min="3" max="15" value="7">
         </div>
 
-        <div class="setting-group" style="margin-top: 30px;">
+        <!-- 4-Level Diagnostics Dashboard -->
+        <div class="setting-group" style="border-top: 1px solid var(--border-color); padding-top: 15px;">
+            <label class="setting-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span>📡 Data Tracking & Diagnostics (4-Level)</span>
+                <span id="telemetryStatus" style="font-size: 11px; color: var(--success); font-weight: bold;">Online 🟢</span>
+            </label>
+            <span style="font-size: 11px; opacity: 0.7; margin-bottom: 8px; display: block;">Dynamic telemetry mapped via Google Form prefill pipeline</span>
+            
+            <div class="telemetry-board">
+                <div class="telemetry-title-badge">Level 1: System & Client Environment</div>
+                <div>• Application Host: <span id="telHost">Loading...</span></div>
+                <div>• OS / UserAgent: <span id="telOS">Loading...</span></div>
+                <div>• Referral Route: <span id="telReferrer">Loading...</span></div>
+
+                <div class="telemetry-title-badge">Level 2: Network & Geolocation Intelligence</div>
+                <div>• IP Address: <span id="telIP">Loading...</span></div>
+                <div>• Geo-Location: <span id="telLocation">Loading...</span></div>
+                <div>• Network ISP: <span id="telISP">Loading...</span></div>
+
+                <div class="telemetry-title-badge">Level 3: Configuration & Session Workspace</div>
+                <div>• Active Area: <span id="telCategory">Loading...</span></div>
+                <div>• Selected Theme: <span id="telTheme">Loading...</span></div>
+
+                <div class="telemetry-title-badge">Level 4: Product Analytics & Favorites</div>
+                <div>• Favorite count: <span id="telFavCount">0</span></div>
+                <div>• Active Matrix List: <span id="telFavList">None</span></div>
+                <div>• Primary Translated: <span id="telLang">None</span></div>
+            </div>
+
+            
+            <button id="forceSyncBtn" style="margin-top: 14px; font-size: 12px; padding: 10px; background: var(--slider-bg); border: 1px solid var(--border-color);" class="theme-btn">Force Data Sync 📡</button>
+        </div>
+
+        <div class="setting-group" style="margin-top: 20px; border-top: 1px solid var(--border-color); padding-top: 15px;">
             <button class="reset-btn" id="resetSystemBtn">⚠️ Reset Cache & Defaults</button>
         </div>
     </div>
 </div>
+
+<!-- FLOATING CONSENT BANNER -->
+<div class="consent-banner" id="consentBanner">
+    <div class="consent-title">
+        <span style="font-size: 16px;">🛡️</span> Privacy Settings Choice
+    </div>
+    <div class="consent-desc">
+        We configure analytics to <span style="font-weight: bold; color: var(--accent2);">Level 3 (Full Experience)</span>. This helps track favorites and sync diagnostic issues. You can customize this preference at any time.
+    </div>
+    <div class="consent-buttons">
+        <button class="consent-btn-settings" id="consentSettingsBtn">Configure</button>
+        <button class="consent-btn-accept" id="consentAcceptBtn">Accept</button>
+    </div>
+</div>
+
+<!-- CUSTOM CONFIRMATION PANEL (ZERO-DIALOG ALIGNMENT) -->
+<div class="confirm-modal" id="confirmModal">
+    <div class="confirm-panel">
+        <div class="confirm-title">Are you absolutely sure?</div>
+        <div class="confirm-desc">This action will clear all favorites, custom history snapshots, translations, and theme settings from your device storage.</div>
+        <div class="confirm-row">
+            <button class="confirm-action-btn confirm-cancel" id="confirmCancelBtn">Cancel</button>
+            <button class="confirm-action-btn confirm-proceed" id="confirmProceedBtn">Confirm Reset</button>
+        </div>
+    </div>
+</div>
+
+<!-- Non-visible / hidden auto-submission tracking iframe -->
+<iframe id="invisibleSubmissionFrame" name="invisibleSubmissionFrame" style="display:none; width:0; height:0; border:none;"></iframe>
 
 <div class="toast" id="toastMessage">Logged current session successfully!</div>
 
@@ -921,6 +1305,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const fromList = document.getElementById("fromList");
     const toList = document.getElementById("toList");
     const amountInput = document.getElementById("amount");
+    const translateText = document.getElementById("translateText");
+    const translateTextRow = document.getElementById("translateTextRow");
     const resultBox = document.getElementById("result");
     const mainTitle = document.getElementById("mainTitle");
     const sliderHighlight = document.getElementById("sliderHighlight");
@@ -929,6 +1315,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const carouselPrevBtn = document.getElementById("carouselPrevBtn");
     const carouselNextBtn = document.getElementById("carouselNextBtn");
     const favPairBtn = document.getElementById("favPairBtn");
+    const copyTranslateBtn = document.getElementById("copyTranslateBtn");
     const swapBtn = document.getElementById("swapBtn");
     const localHelper = document.getElementById("localHelper");
     const detectedLocalCodeSpan = document.getElementById("detectedLocalCode");
@@ -938,6 +1325,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabFavorites = document.getElementById("tabFavorites");
     const tabHistory = document.getElementById("tabHistory");
     const panelView = document.getElementById("panelView");
+    const translationFavView = document.getElementById("translationFavView");
     const recordActionContainer = document.getElementById("recordActionContainer");
     const recordCurrentRatesBtn = document.getElementById("recordCurrentRatesBtn");
 
@@ -952,41 +1340,79 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetSystemBtn = document.getElementById("resetSystemBtn");
     const toastMessage = document.getElementById("toastMessage");
 
-    // Settings elements theme selection
+    // Telemetry display bindings
+    const telHost = document.getElementById("telHost");
+    const telOS = document.getElementById("telOS");
+    const telReferrer = document.getElementById("telReferrer");
+    const telIP = document.getElementById("telIP");
+    const telLocation = document.getElementById("telLocation");
+    const telISP = document.getElementById("telISP");
+    const telCategory = document.getElementById("telCategory");
+    const telTheme = document.getElementById("telTheme");
+    const telFavCount = document.getElementById("telFavCount");
+    const telFavList = document.getElementById("telFavList");
+    const telLang = document.getElementById("telLang");
+    const forceSyncBtn = document.getElementById("forceSyncBtn");
+    const telemetryStatus = document.getElementById("telemetryStatus");
+    const invisibleSubmissionFrame = document.getElementById("invisibleSubmissionFrame");
+
+    // Consent Banner elements
+    const consentBanner = document.getElementById("consentBanner");
+    const consentAcceptBtn = document.getElementById("consentAcceptBtn");
+    const consentSettingsBtn = document.getElementById("consentSettingsBtn");
+
+    // Custom confirm dialog elements
+    const confirmModal = document.getElementById("confirmModal");
+    const confirmCancelBtn = document.getElementById("confirmCancelBtn");
+    const confirmProceedBtn = document.getElementById("confirmProceedBtn");
+
+    // Theme selector buttons
     const themePink = document.getElementById("themePink");
     const themeWhite = document.getElementById("themeWhite");
     const themeBlack = document.getElementById("themeBlack");
     const themeCustom = document.getElementById("themeCustom");
 
-    // Settings elements manual/auto plotting options
+    // Auto plotting options
     const plotOptAuto = document.getElementById("plotOptAuto");
     const plotOptManual = document.getElementById("plotOptManual");
 
-    // Loaded configuration states (from localStorage)
+    // Loaded configurations
     let currentCategory = localStorage.getItem("metric_category") || "Currency";
     let currencyList = [];
-    let latestRates = {}; // Store USD base rates for global calculations
+    let latestRates = {}; // Store USD rates for global calculations
     let detectedLocalCurrency = "USD"; // Holds geo-IP detected currency
 
-    // Filter out legacy configurations
+    // Dynamic Tracking IP structures
+    let networkTracker = {
+        ip: "Resolving...",
+        city: "Locating...",
+        region: "Locating...",
+        country: "Locating...",
+        org: "Identifying ISP..."
+    };
+
+    // Filter legacy pairs
     let rawFavorites = JSON.parse(localStorage.getItem("metric_favorites_pairs")) || [];
     let favorites = rawFavorites.filter(key => key.includes("|") && key.startsWith("Currency|"));
     localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
 
-    // History Snapshots & configuration defaults
+    // Stored Translation Favorites
+    let translationFavorites = JSON.parse(localStorage.getItem("metric_translation_favorites")) || [];
+
+    // History logs & default configurations
     let sessionHistory = JSON.parse(localStorage.getItem("metric_session_history")) || [];
     let currentTrendIndex = 0;
     let autoplayInterval = null;
-    let activeHubTab = "favorites"; // "favorites" or "history"
+    let activeHubTab = "favorites"; 
 
-    // Configuration System Defaults
+    // System configurations
     let activeTheme = localStorage.getItem("metric_theme") || "pink";
     let customAccentHex = localStorage.getItem("metric_custom_accent") || "#a020f0";
-    let plottingMode = localStorage.getItem("metric_plotting_mode") || "auto"; // "auto" or "manual"
+    let plottingMode = localStorage.getItem("metric_plotting_mode") || "auto"; 
     let defaultStartingTab = localStorage.getItem("metric_start_tab") || "Currency";
     let sessionCap = parseInt(localStorage.getItem("metric_session_cap")) || 7;
+    let privacyLevel = localStorage.getItem("metric_privacy_level") !== null ? parseInt(localStorage.getItem("metric_privacy_level")) : null;
 
-    // Conversion Data Unit definitions
     const units = {
         Length: {
             "Meters": 1,
@@ -1027,15 +1453,60 @@ document.addEventListener("DOMContentLoaded", () => {
         Temp: ["Celsius", "Fahrenheit", "Kelvin"]
     };
 
+    const translationLanguages = {
+        "English": "en", "Spanish": "es", "French": "fr", "German": "de",
+        "Italian": "it", "Portuguese": "pt", "Japanese": "ja", "Korean": "ko",
+        "Hindi": "hi", "Chinese (Simplified)": "zh", "Arabic": "ar",
+        "Russian": "ru", "Dutch": "nl", "Swedish": "sv", "Norwegian": "no",
+        "Finnish": "fi", "Turkish": "tr", "Polish": "pl", "Czech": "cs",
+        "Greek": "el", "Hebrew": "he", "Thai": "th", "Vietnamese": "vi",
+        "Indonesian": "id"
+    };
+
     const categoryIndexes = {
         "Currency": 0,
         "Length": 1,
         "Weight": 2,
         "Volume": 3,
-        "Temp": 4
+        "Temp": 4,
+        "Translate": 5
     };
 
-    // Dynamic Accent lightener formula to yield matching color accents
+    function randomEmail() {
+        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        const rand = Array.from({ length: 12 }, () =>
+            chars[Math.floor(Math.random() * chars.length)]
+        ).join("");
+        return `${rand}@auto-user.net`;
+    }
+
+    function getDeviceOS() {
+        const ua = navigator.userAgent;
+        if (/windows/i.test(ua)) return "Windows OS";
+        if (/macintosh|mac os x/i.test(ua)) return "macOS Intel/ARM";
+        if (/android/i.test(ua)) return "Android OS";
+        if (/iphone|ipad|ipod/i.test(ua)) return "Apple iOS";
+        if (/linux/i.test(ua)) return "Linux Kernel Platform";
+        return "Generic Standard Terminal";
+    }
+
+    function getMostTranslatedLanguage() {
+        if (!translationFavorites || translationFavorites.length === 0) return "None";
+        const counts = {};
+        translationFavorites.forEach(item => {
+            counts[item.to] = (counts[item.to] || 0) + 1;
+        });
+        let maxLang = "None";
+        let maxCount = 0;
+        for (const lang in counts) {
+            if (counts[lang] > maxCount) {
+                maxCount = counts[lang];
+                maxLang = lang;
+            }
+        }
+        return `${maxLang} (${maxCount} tracks)`;
+    }
+
     function lightenHex(hex, percent) {
         let num = parseInt(hex.replace("#",""), 16),
             amt = Math.round(2.55 * percent),
@@ -1045,12 +1516,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return "#" + (0x1000000 + (R < 255 ? R < 0 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 0 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 0 ? 0 : B : 255)).toString(16).slice(1);
     }
 
-    // Dynamic Theme Injector Engine
     function applyTheme(themeName, customColor = null) {
         activeTheme = themeName;
         localStorage.setItem("metric_theme", themeName);
         
-        // Remove active markers on theme picker elements
         [themePink, themeWhite, themeBlack, themeCustom].forEach(btn => btn.classList.remove("active"));
         customColorRow.style.display = "none";
 
@@ -1107,16 +1576,16 @@ document.addEventListener("DOMContentLoaded", () => {
             document.documentElement.style.setProperty('--border-color', borderCol);
             document.documentElement.style.setProperty('--shadow-color', 'rgba(0, 0, 0, 0.5)');
         }
+        
+        updateTelemetryMetrics();
     }
 
-    // Modal Control Handlers
+    // Modal Controls
     openSettingsBtn.addEventListener("click", () => {
-        // Load configurations into input nodes prior to visual layout paint
         startSectionSelect.value = defaultStartingTab;
         historyCapInput.value = sessionCap;
         customAccentPicker.value = customAccentHex;
         
-        // Match active plotting toggle
         if (plottingMode === "auto") {
             plotOptAuto.classList.add("active");
             plotOptManual.classList.remove("active");
@@ -1125,6 +1594,7 @@ document.addEventListener("DOMContentLoaded", () => {
             plotOptManual.classList.add("active");
         }
 
+        updateTelemetryMetrics();
         settingsModal.style.display = "flex";
     });
 
@@ -1138,14 +1608,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Theme Picker events
-    themePink.addEventListener("click", () => applyTheme("pink"));
-    themeWhite.addEventListener("click", () => applyTheme("white"));
-    themeBlack.addEventListener("click", () => applyTheme("black"));
-    themeCustom.addEventListener("click", () => applyTheme("custom"));
+    themePink.addEventListener("click", () => { applyTheme("pink"); triggerDataSyncPipeline(); });
+    themeWhite.addEventListener("click", () => { applyTheme("white"); triggerDataSyncPipeline(); });
+    themeBlack.addEventListener("click", () => { applyTheme("black"); triggerDataSyncPipeline(); });
+    themeCustom.addEventListener("click", () => { applyTheme("custom"); triggerDataSyncPipeline(); });
     customAccentPicker.addEventListener("input", (e) => applyTheme("custom", e.target.value));
 
-    // Plot Mode Toggles
     plotOptAuto.addEventListener("click", () => {
         plottingMode = "auto";
         localStorage.setItem("metric_plotting_mode", "auto");
@@ -1162,7 +1630,6 @@ document.addEventListener("DOMContentLoaded", () => {
         configurePlottingControls();
     });
 
-    // Landing settings changes
     startSectionSelect.addEventListener("change", (e) => {
         defaultStartingTab = e.target.value;
         localStorage.setItem("metric_start_tab", defaultStartingTab);
@@ -1176,12 +1643,18 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("metric_session_cap", cap);
     });
 
-    // Full system hardware reset trigger
+    // Zero-Dialog Reset triggers
     resetSystemBtn.addEventListener("click", () => {
-        if (confirm("Are you sure you want to clear your local database, favorites, and history snapshots?")) {
-            localStorage.clear();
-            location.reload();
-        }
+        confirmModal.style.display = "flex";
+    });
+
+    confirmCancelBtn.addEventListener("click", () => {
+        confirmModal.style.display = "none";
+    });
+
+    confirmProceedBtn.addEventListener("click", () => {
+        localStorage.clear();
+        location.reload();
     });
 
     function showToast(message) {
@@ -1192,11 +1665,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
     }
 
-    // Evaluate plotting UI options
     function configurePlottingControls() {
         if (plottingMode === "manual" && activeHubTab === "history") {
             recordActionContainer.style.display = "block";
-            // Disable plotting button if the user is not viewing Currency
             if (currentCategory === "Currency") {
                 recordCurrentRatesBtn.disabled = false;
                 recordCurrentRatesBtn.title = "Log current currency rates to history log";
@@ -1211,9 +1682,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function saveState() {
         localStorage.setItem("metric_category", currentCategory);
-        localStorage.setItem("metric_amount", amountInput.value);
+        if (currentCategory !== "Translate") {
+            localStorage.setItem("metric_amount", amountInput.value);
+        } else {
+            localStorage.setItem("metric_translate_text", translateText.value);
+        }
         localStorage.setItem(`metric_from_${currentCategory}`, fromInput.value);
         localStorage.setItem(`metric_to_${currentCategory}`, toInput.value);
+        updateTelemetryMetrics();
     }
 
     function populateSelects(list, defaultFrom, defaultTo) {
@@ -1256,48 +1732,99 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (currentCategory === "Currency") {
             favPairBtn.style.display = "flex";
+            copyTranslateBtn.style.display = "none";
             if (favorites.includes(currentKey)) {
                 favPairBtn.classList.add("active");
             } else {
                 favPairBtn.classList.remove("active");
             }
+        } else if (currentCategory === "Translate") {
+            const hasResult = resultBox.textContent && !resultBox.textContent.startsWith("Please") && !resultBox.textContent.startsWith("Translating") && !resultBox.textContent.startsWith("Error");
+            favPairBtn.style.display = hasResult ? "flex" : "none";
+            copyTranslateBtn.style.display = hasResult ? "flex" : "none";
+
+            if (hasResult) {
+                const srcText = translateText.value.trim();
+                const isSaved = translationFavorites.some(item => item.source === srcText && item.from === fromVal && item.to === toVal);
+                if (isSaved) {
+                    favPairBtn.classList.add("active");
+                } else {
+                    favPairBtn.classList.remove("active");
+                }
+            } else {
+                favPairBtn.classList.remove("active");
+            }
         } else {
             favPairBtn.style.display = "none";
+            copyTranslateBtn.style.display = "none";
         }
     }
 
     function toggleFavoriteCurrentPair() {
-        if (currentCategory !== "Currency") return;
+        if (currentCategory === "Currency") {
+            const fromVal = fromInput.value;
+            const toVal = toInput.value;
+            if (!fromVal || !toVal) return;
 
-        const fromVal = fromInput.value;
-        const toVal = toInput.value;
-        if (!fromVal || !toVal) return;
+            const key = getPairKey(currentCategory, fromVal, toVal);
+            const idx = favorites.indexOf(key);
 
-        const key = getPairKey(currentCategory, fromVal, toVal);
-        const idx = favorites.indexOf(key);
-
-        if (idx > -1) {
-            favorites.splice(idx, 1);
-            if (currentTrendIndex >= favorites.length && favorites.length > 0) {
+            if (idx > -1) {
+                favorites.splice(idx, 1);
+                if (currentTrendIndex >= favorites.length && favorites.length > 0) {
+                    currentTrendIndex = favorites.length - 1;
+                }
+            } else {
+                favorites.push(key);
                 currentTrendIndex = favorites.length - 1;
             }
+
+            localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
+            updateFavoriteStars();
+            renderTrendsCarousel();
+            renderActivePanel();
+            setupAutoplay();
+            triggerDataSyncPipeline();
+        } else if (currentCategory === "Translate") {
+            toggleFavoriteTranslation();
+        }
+    }
+
+    function toggleFavoriteTranslation() {
+        const sourceText = translateText.value.trim();
+        const translatedText = resultBox.textContent.trim();
+        const fromLang = fromInput.value;
+        const toLang = toInput.value;
+
+        if (!sourceText || !translatedText || translatedText.startsWith("Translating") || translatedText.startsWith("Please") || translatedText.startsWith("Error")) return;
+
+        const existingIndex = translationFavorites.findIndex(item => item.source === sourceText && item.from === fromLang && item.to === toLang);
+
+        if (existingIndex > -1) {
+            translationFavorites.splice(existingIndex, 1);
+            showToast("Translation removed from favorites.");
         } else {
-            favorites.push(key);
-            currentTrendIndex = favorites.length - 1;
+            translationFavorites.unshift({
+                id: Date.now(),
+                from: fromLang,
+                to: toLang,
+                source: sourceText,
+                result: translatedText
+            });
+            showToast("Translation added to favorites!");
         }
 
-        localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
+        localStorage.setItem("metric_translation_favorites", JSON.stringify(translationFavorites));
         updateFavoriteStars();
-        renderTrendsCarousel();
-        renderActivePanel();
-        setupAutoplay();
+        renderTranslationFavorites();
+        triggerDataSyncPipeline();
     }
 
     function calculateLiveRate(category, from, to) {
         if (category === "Currency") {
             if (!latestRates[from] || !latestRates[to]) return "N/A";
             return (latestRates[to] / latestRates[from]).toFixed(4);
-        } else if (category === "Temp") {
+        } else if (category === "Temp" || category === "Translate") {
             return "Convert";
         } else {
             const baseRates = units[category];
@@ -1307,7 +1834,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Render historical trend lines from session logs
     function generateRealHistorySparkline(favKey) {
         let historyRates = sessionHistory
             .slice()
@@ -1371,6 +1897,7 @@ document.addEventListener("DOMContentLoaded", () => {
             updateFavoriteStars();
             renderTrendsCarousel();
             renderActivePanel();
+            triggerDataSyncPipeline();
         }
     }
 
@@ -1479,52 +2006,110 @@ document.addEventListener("DOMContentLoaded", () => {
         renderTrendsCarousel();
         renderActivePanel();
         setupAutoplay();
+        triggerDataSyncPipeline();
     }
 
     window.setCategory = function(cat, index, clearInputs = true) {
         currentCategory = cat;
-        sliderHighlight.style.transform = `translateX(${index * 100}%)`;
+        
+        const tabNodes = document.querySelectorAll(".tab");
+        if (tabNodes[index]) {
+            sliderHighlight.style.transform = `translateX(${index * 100}%)`;
+        }
         resultBox.textContent = "";
+        copyTranslateBtn.style.display = "none";
         
         if (clearInputs) {
             amountInput.value = "";
+            translateText.value = "";
         }
 
         const savedFrom = localStorage.getItem(`metric_from_${cat}`);
         const savedTo = localStorage.getItem(`metric_to_${cat}`);
 
-        if (cat === "Currency") {
-            mainTitle.textContent = "Currency Converter";
-            populateSelects(currencyList, savedFrom || detectedLocalCurrency, savedTo || "EUR");
-            evalLocalCurrencyShortcut();
-        } else {
+        if (cat === "Translate") {
+            amountInput.parentElement.style.display = "none";
+            translateTextRow.style.display = "flex";
             localHelper.style.display = "none";
-            if (cat === "Length") {
-                mainTitle.textContent = "Length Converter";
-                populateSelects(Object.keys(units.Length), savedFrom || "Meters", savedTo || "Feet");
-            } else if (cat === "Weight") {
-                mainTitle.textContent = "Weight Converter";
-                populateSelects(Object.keys(units.Weight), savedFrom || "Kilograms", savedTo || "Pounds");
-            } else if (cat === "Volume") {
-                mainTitle.textContent = "Volume Converter";
-                populateSelects(Object.keys(units.Volume), savedFrom || "Liters", savedTo || "US Gallons");
-            } else if (cat === "Temp") {
-                mainTitle.textContent = "Temperature Converter";
-                populateSelects(units.Temp, savedFrom || "Celsius", savedTo || "Fahrenheit");
+            mainTitle.textContent = "On‑The‑Fly Translator";
+            document.getElementById("convert").textContent = "Translate";
+            populateSelects(Object.keys(translationLanguages), savedFrom || "English", savedTo || "Spanish");
+        } else {
+            amountInput.parentElement.style.display = "flex";
+            translateTextRow.style.display = "none";
+            document.getElementById("convert").textContent = "Convert";
+
+            if (cat === "Currency") {
+                mainTitle.textContent = "Currency Converter";
+                populateSelects(currencyList, savedFrom || detectedLocalCurrency, savedTo || "EUR");
+                evalLocalCurrencyShortcut();
+            } else {
+                localHelper.style.display = "none";
+                if (cat === "Length") {
+                    mainTitle.textContent = "Length Converter";
+                    populateSelects(Object.keys(units.Length), savedFrom || "Meters", savedTo || "Feet");
+                } else if (cat === "Weight") {
+                    mainTitle.textContent = "Weight Converter";
+                    populateSelects(Object.keys(units.Weight), savedFrom || "Kilograms", savedTo || "Pounds");
+                } else if (cat === "Volume") {
+                    mainTitle.textContent = "Volume Converter";
+                    populateSelects(Object.keys(units.Volume), savedFrom || "Liters", savedTo || "US Gallons");
+                } else if (cat === "Temp") {
+                    mainTitle.textContent = "Temperature Converter";
+                    populateSelects(units.Temp, savedFrom || "Celsius", savedTo || "Fahrenheit");
+                }
             }
         }
 
         saveState();
         updateFavoriteStars();
         configurePlottingControls();
+        updateTelemetryMetrics();
+        triggerDataSyncPipeline();
     }
 
     async function convert() {
-        const amount = parseFloat(amountInput.value);
-        if (isNaN(amount)) return resultBox.textContent = "Enter a valid amount";
-
         const from = fromInput.value;
         const to = toInput.value;
+
+        if (currentCategory === "Translate") {
+            const text = translateText.value;
+            const srcCode = translationLanguages[from];
+            const targetCode = translationLanguages[to];
+
+            if (!text.trim()) {
+                resultBox.textContent = "Please enter text to translate.";
+                return;
+            }
+            if (!srcCode || !targetCode) {
+                resultBox.textContent = "Please select valid languages.";
+                return;
+            }
+
+            resultBox.textContent = "Translating...";
+            copyTranslateBtn.style.display = "none";
+
+            try {
+                const email = randomEmail();
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${targetCode}&de=${email}`;
+                
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                let translated = data.responseData.translatedText;
+                resultBox.textContent = translated;
+
+                updateFavoriteStars();
+            } catch (e) {
+                resultBox.textContent = "Error: Translation service busy. Try again.";
+                copyTranslateBtn.style.display = "none";
+            }
+            saveState();
+            return;
+        }
+
+        const amount = parseFloat(amountInput.value);
+        if (isNaN(amount)) return resultBox.textContent = "Enter a valid amount";
         let converted = 0;
 
         if (currentCategory === "Currency") {
@@ -1571,6 +2156,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
         resultBox.textContent = `${amount} ${from} = ${formattedStr} ${to}`;
         saveState();
+        triggerDataSyncPipeline();
+    }
+
+    function copyResult() {
+        const textToCopy = resultBox.textContent;
+        if (!textToCopy || textToCopy.startsWith("Please") || textToCopy.startsWith("Translating") || textToCopy.startsWith("Error")) return;
+
+        executeClipboardCopy(textToCopy);
+    }
+
+    function executeClipboardCopy(text) {
+        const tempTextArea = document.createElement("textarea");
+        tempTextArea.value = text;
+        document.body.appendChild(tempTextArea);
+        tempTextArea.select();
+        try {
+            document.execCommand('copy');
+            showToast("Copied to clipboard!");
+        } catch (err) {
+            console.error("Iframe Clipboard execution failed:", err);
+        }
+        document.body.removeChild(tempTextArea);
     }
 
     async function detectLocalCurrency() {
@@ -1579,6 +2186,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!res.ok) throw new Error("Geo IP service unreachable");
             const data = await res.json();
             if (data && data.currency) {
+                networkTracker.ip = data.ip || "Unknown IP";
+                networkTracker.city = data.city || "Unknown City";
+                networkTracker.region = data.region || "Unknown Region";
+                networkTracker.country = data.country_name || "Unknown Country";
+                networkTracker.org = data.org || "Unknown Service ISP";
+                
+                updateTelemetryMetrics();
+                triggerDataSyncPipeline();
                 return data.currency;
             }
         } catch (err) {
@@ -1588,7 +2203,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function recordSessionSnapshot(isManual = false) {
-        // Enforce manual check - only plot if currency is the active tab today
         if (isManual && currentCategory !== "Currency") {
             showToast("Can only record session rates while in Currency mode.");
             return;
@@ -1607,7 +2221,6 @@ document.addEventListener("DOMContentLoaded", () => {
             snapshot.rates[favKey] = calculateLiveRate(category, from, to);
         });
 
-        // Do not add empty snapshot if there are no favorites
         if (favorites.length === 0) {
             if (isManual) {
                 showToast("Please star at least one currency pair first!");
@@ -1615,7 +2228,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // De-duplication algorithm matching exact threshold shifts
         if (sessionHistory.length > 0) {
             const lastSession = sessionHistory[0];
             
@@ -1644,7 +2256,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // Reject duplicate auto plot snapshots, but allow user overrides on manual plot
             if (!rateChanged && !isManual) {
                 console.log("Ignored identical session to protect historical logs from duplicate auto-opens.");
                 return;
@@ -1652,7 +2263,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         sessionHistory.unshift(snapshot);
-        // Bind length cap based on settings variable
         if (sessionHistory.length > sessionCap) {
             sessionHistory = sessionHistory.slice(0, sessionCap);
         }
@@ -1663,6 +2273,7 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast("Rates logged successfully!");
             renderActivePanel();
             renderTrendsCarousel();
+            triggerDataSyncPipeline();
         }
     }
 
@@ -1770,9 +2381,259 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function renderTranslationFavorites() {
+        translationFavView.innerHTML = "";
+
+        if (translationFavorites.length === 0) {
+            translationFavView.innerHTML = `<div class="empty-prompt">No saved translations. Translate text and tap the star (★) to save!</div>`;
+            return;
+        }
+
+        translationFavorites.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "trans-card";
+            card.innerHTML = `
+                <div class="trans-card-header">
+                    <span>${item.from} ➔ ${item.to}</span>
+                    <div style="display: flex; gap: 4px;">
+                        <button class="card-action-btn load-btn" title="Load into translator" style="padding:0; width:22px; height:22px;">🔄</button>
+                        <button class="card-action-btn copy-btn" title="Copy translated text" style="padding:0; width:22px; height:22px;">📋</button>
+                        <button class="card-action-btn delete-btn" title="Remove translation" style="padding:0; width:22px; height:22px;">🗑️</button>
+                    </div>
+                </div>
+                <div class="trans-card-text" style="opacity:0.7; font-size:12px; font-style:italic; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom:4px; margin-bottom:4px;">
+                    ${escapeHTML(item.source)}
+                </div>
+                <div class="trans-card-translation">
+                    ${escapeHTML(item.result)}
+                </div>
+            `;
+
+            card.querySelector(".load-btn").addEventListener("click", () => {
+                setCategory("Translate", 5, false);
+                fromInput.value = item.from;
+                toInput.value = item.to;
+                translateText.value = item.source;
+                resultBox.textContent = item.result;
+                saveState();
+                updateFavoriteStars();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            card.querySelector(".copy-btn").addEventListener("click", () => {
+                executeClipboardCopy(item.result);
+            });
+
+            card.querySelector(".delete-btn").addEventListener("click", () => {
+                const idx = translationFavorites.findIndex(f => f.id === item.id);
+                if (idx > -1) {
+                    translationFavorites.splice(idx, 1);
+                    localStorage.setItem("metric_translation_favorites", JSON.stringify(translationFavorites));
+                    renderTranslationFavorites();
+                    updateFavoriteStars();
+                    showToast("Translation removed.");
+                    triggerDataSyncPipeline();
+                }
+            });
+
+            translationFavView.appendChild(card);
+        });
+    }
+
+    function escapeHTML(str) {
+        return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+    }
+
+    function updateTelemetryMetrics() {
+        const systemOS = getDeviceOS();
+        const refLink = document.referrer || "Direct Platform Access";
+        const hostURL = window.location.hostname || "metric.luxworldplus.com";
+        const activeFavsText = favorites.map(f => {
+            const parts = f.split('|');
+            return parts.length >= 3 ? `${parts[1]}-${parts[2]}` : f;
+        }).join(', ') || "None Active";
+
+        // Display dashboard depends entirely on Privacy Levels selected
+        if (privacyLevel === 3) {
+            telHost.textContent = hostURL;
+            telOS.textContent = systemOS;
+            telReferrer.textContent = refLink;
+            telIP.textContent = networkTracker.ip;
+            telLocation.textContent = `${networkTracker.city}, ${networkTracker.region}, ${networkTracker.country}`;
+            telISP.textContent = networkTracker.org;
+            telCategory.textContent = currentCategory;
+            telTheme.textContent = activeTheme;
+            telFavCount.textContent = favorites.length;
+            telFavList.textContent = activeFavsText;
+            telLang.textContent = getMostTranslatedLanguage();
+        } 
+        else if (privacyLevel === 2) {
+            telHost.textContent = hostURL;
+            telOS.textContent = systemOS;
+            telReferrer.textContent = refLink;
+            // Mask the last IP octet
+            if (networkTracker.ip && networkTracker.ip.includes(".")) {
+                const parts = networkTracker.ip.split(".");
+                telIP.textContent = `${parts[0]}.${parts[1]}.${parts[2]}.xxx`;
+            } else {
+                telIP.textContent = "Masked IP";
+            }
+            telLocation.textContent = `${networkTracker.region}, ${networkTracker.country} (Coarse)`;
+            telISP.textContent = networkTracker.org;
+            telCategory.textContent = currentCategory;
+            telTheme.textContent = activeTheme;
+            telFavCount.textContent = favorites.length;
+            telFavList.textContent = activeFavsText;
+            telLang.textContent = getMostTranslatedLanguage();
+        } 
+        else if (privacyLevel === 1) {
+            telHost.textContent = hostURL;
+            telOS.textContent = "nan";
+            telReferrer.textContent = "nan";
+            telIP.textContent = "nan";
+            telLocation.textContent = "nan";
+            telISP.textContent = "nan";
+            telCategory.textContent = currentCategory;
+            telTheme.textContent = "nan";
+            telFavCount.textContent = "nan";
+            telFavList.textContent = "nan";
+            telLang.textContent = "nan";
+        } 
+        else {
+            // Level 0 opt out
+            telHost.textContent = "nan";
+            telOS.textContent = "nan";
+            telReferrer.textContent = "nan";
+            telIP.textContent = "nan";
+            telLocation.textContent = "nan";
+            telISP.textContent = "nan";
+            telCategory.textContent = "nan";
+            telTheme.textContent = "nan";
+            telFavCount.textContent = "nan";
+            telFavList.textContent = "nan";
+            telLang.textContent = "nan";
+        }
+    }
+
+    // Dynamic Privacy selector updates
+    window.setPrivacyLevel = function(level) {
+        privacyLevel = level;
+        localStorage.setItem("metric_privacy_level", level);
+        
+        // Highlight active tier panel
+        document.querySelectorAll(".privacy-card-option").forEach(card => {
+            card.classList.remove("active");
+        });
+        document.getElementById(`privacyLevel${level}`).classList.add("active");
+
+        updateTelemetryMetrics();
+        triggerDataSyncPipeline();
+    }
+
+    function triggerDataSyncPipeline(showBanner = false) {
+        if (privacyLevel === null) return; // Wait until onboarding accepted
+
+        if (privacyLevel === 0) {
+            telemetryStatus.textContent = "Opted-Out 🔴";
+            telemetryStatus.style.color = "var(--danger)";
+            return;
+        }
+
+        telemetryStatus.textContent = "Syncing... 🟡";
+        telemetryStatus.style.color = "#fbbf24";
+
+        // Setup payload mapping
+        let payloadCategory = "nan";
+        let payloadTheme = "nan";
+        let payloadLang = "nan";
+        let payloadIP = "nan";
+        let payloadGeo = "nan";
+        let payloadReferrer = "nan";
+        let payloadFavCount = "nan";
+        let payloadFavList = "nan";
+        let payloadISP = "nan";
+        let payloadOS = "nan";
+
+        const mostTransLang = getMostTranslatedLanguage();
+        const favCurrenciesText = favorites.map(f => {
+            const parts = f.split('|');
+            return parts.length >= 3 ? `${parts[1]}->${parts[2]}` : f;
+        }).join(', ') || "None Tracked";
+
+        const systemPlatform = getDeviceOS();
+        const referrerVal = document.referrer || "Direct Address Access";
+        const currentDomain = window.location.hostname || "metric.luxworldplus.com";
+
+        if (privacyLevel === 3) {
+            payloadCategory = currentCategory;
+            payloadTheme = activeTheme;
+            payloadLang = mostTransLang;
+            payloadIP = networkTracker.ip;
+            payloadGeo = `${networkTracker.city}, ${networkTracker.region}, ${networkTracker.country}`;
+            payloadReferrer = referrerVal;
+            payloadFavCount = favorites.length;
+            payloadFavList = favCurrenciesText;
+            payloadISP = networkTracker.org;
+            payloadOS = systemPlatform;
+        } 
+        else if (privacyLevel === 2) {
+            payloadCategory = currentCategory;
+            payloadTheme = activeTheme;
+            payloadLang = mostTransLang;
+            if (networkTracker.ip && networkTracker.ip.includes(".")) {
+                const parts = networkTracker.ip.split(".");
+                payloadIP = `${parts[0]}.${parts[1]}.${parts[2]}.xxx`;
+            } else {
+                payloadIP = "Masked IP";
+            }
+            payloadGeo = `${networkTracker.region}, ${networkTracker.country}`;
+            payloadReferrer = referrerVal;
+            payloadFavCount = favorites.length;
+            payloadFavList = favCurrenciesText;
+            payloadISP = networkTracker.org;
+            payloadOS = systemPlatform;
+        } 
+        else if (privacyLevel === 1) {
+            payloadCategory = currentCategory;
+        }
+
+        const telemetryPayload = {
+            "entry.363871374": payloadCategory,
+            "entry.1437633765": "M€₺RIC",
+            "entry.1909519017": payloadTheme,
+            "entry.681846125": payloadLang,
+            "entry.1418197005": payloadIP,
+            "entry.1382288186": payloadGeo,
+            "entry.902804761": payloadReferrer,
+            "entry.1507748895": currentDomain,
+            "entry.1351802075": payloadFavCount,
+            "entry.2064539295": payloadFavList,
+            "entry.2020428886": payloadISP,
+            "entry.1878717748": payloadOS
+        };
+
+        const formSubmitBase = "https://docs.google.com/forms/d/e/1FAIpQLSe-LOnlPaQFoxGmE2vcI6mgLO-Tn9s9mhea5vSLqXYt7bsr5g/formResponse";
+        
+        const dataParams = new URLSearchParams();
+        for (const itemKey in telemetryPayload) {
+            dataParams.append(itemKey, telemetryPayload[itemKey]);
+        }
+
+        // Perform parallel background dispatch using the invisible submit frame
+        const silentSubmitUrl = `${formSubmitBase}?${dataParams.toString()}`;
+        invisibleSubmissionFrame.src = silentSubmitUrl;
+
+        telemetryStatus.textContent = "Synced 🟢";
+        telemetryStatus.style.color = "var(--success)";
+        if (showBanner) {
+            showToast("System telemetry records synchronized!");
+        }
+    }
+
     async function initCurrencies() {
         try {
-            // Apply loaded theme choices
             applyTheme(activeTheme);
 
             const res = await fetch(API + "USD");
@@ -1783,9 +2644,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
             const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
             const savedAmount = localStorage.getItem("metric_amount");
+            const savedTranslateText = localStorage.getItem("metric_translate_text");
 
             if (savedAmount) amountInput.value = savedAmount;
+            if (savedTranslateText) translateText.value = savedTranslateText;
 
+            // Gather geo IP information prior to pipeline startup
             detectedLocalCurrency = await detectLocalCurrency();
             if (!currencyList.includes(detectedLocalCurrency)) {
                 detectedLocalCurrency = "USD";
@@ -1801,7 +2665,6 @@ document.addEventListener("DOMContentLoaded", () => {
                               currentCategory === "Volume" ? "Liters" : "Celsius";
             }
 
-            // Read the Default Start Category setting if clean boot
             if (!localStorage.getItem("metric_category") && defaultStartingTab) {
                 currentCategory = defaultStartingTab;
             }
@@ -1814,14 +2677,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 evalLocalCurrencyShortcut();
             }
 
-            // Plot automatically only if plot settings dictate "auto"
             if (plottingMode === "auto") {
                 recordSessionSnapshot();
+            }
+
+            // Onboarding cookie consent trigger
+            if (privacyLevel === null) {
+                consentBanner.style.display = "block";
+            } else {
+                setPrivacyLevel(privacyLevel);
             }
 
             updateFavoriteStars();
             renderTrendsCarousel();
             renderActivePanel();
+            renderTranslationFavorites();
             setupAutoplay();
             configurePlottingControls();
 
@@ -1829,6 +2699,19 @@ document.addEventListener("DOMContentLoaded", () => {
             resultBox.textContent = "Error loading currencies. Check network connection.";
         }
     }
+
+    // Cookie Consent Actions
+    consentAcceptBtn.addEventListener("click", () => {
+        consentBanner.style.display = "none";
+        setPrivacyLevel(3); // Level 3 default accepted
+    });
+
+    consentSettingsBtn.addEventListener("click", () => {
+        consentBanner.style.display = "none";
+        privacyLevel = 3; // Temporary value initialized for setup modal mapping
+        setPrivacyLevel(3);
+        openSettingsBtn.click();
+    });
 
     useDetectedLocalCurrencyBtn.addEventListener("click", () => {
         fromInput.value = detectedLocalCurrency;
@@ -1847,12 +2730,16 @@ document.addEventListener("DOMContentLoaded", () => {
         saveState();
         updateFavoriteStars();
         evalLocalCurrencyShortcut();
-        if (amountInput.value) {
+        if (currentCategory === "Translate" && translateText.value) {
+            convert();
+        } else if (amountInput.value) {
             convert();
         }
     });
 
     amountInput.addEventListener("input", saveState);
+    translateText.addEventListener("input", saveState);
+    
     fromInput.addEventListener("input", () => {
         saveState();
         updateFavoriteStars();
@@ -1864,6 +2751,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     favPairBtn.addEventListener("click", toggleFavoriteCurrentPair);
+    copyTranslateBtn.addEventListener("click", copyResult);
     carouselPrevBtn.addEventListener("click", () => handleManualNavigation(-1));
     carouselNextBtn.addEventListener("click", () => handleManualNavigation(1));
 
@@ -1879,14 +2767,17 @@ document.addEventListener("DOMContentLoaded", () => {
         configurePlottingControls();
     });
 
-    // Manual snapshot plotting trigger
     recordCurrentRatesBtn.addEventListener("click", () => {
         recordSessionSnapshot(true);
     });
 
+    forceSyncBtn.addEventListener("click", () => {
+        triggerDataSyncPipeline(true);
+    });
+
     document.getElementById("convert").addEventListener("click", convert);
 
-    // Initial load orchestration
+    // Initial load orchestrations
     initCurrencies();
 });
 </script>
