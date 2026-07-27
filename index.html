@@ -2113,7 +2113,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localHelper.style.display = "none";
             mainTitle.textContent = "Miles & Points Converter";
             document.getElementById("convert").textContent = "Convert Miles";
-            populateSelects(Object.keys(milesPrograms), savedFrom || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
+            populateSelects(Object.keys(milesPrograms), savedFrom || "American", savedTo || "USD ($ US Dollar)");
         } else {
             amountInput.parentElement.style.display = "flex";
             translateTextRow.style.display = "none";
@@ -2705,7 +2705,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!initialFrom && currentCategory === "Currency") {
                 initialFrom = detectedLocalCurrency;
             } else if (!initialFrom) {
-                initialFrom = currentCategory === "Miles" ? "Delta SkyMiles" :
+                initialFrom = currentCategory === "Miles" ? "American" :
                               currentCategory === "Length" ? "Meters" :
                               currentCategory === "Weight" ? "Kilograms" :
                               currentCategory === "Volume" ? "Liters" : "Celsius";
@@ -2718,7 +2718,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 populateSelects(currencyList, initialFrom, savedTo || "EUR");
                 evalLocalCurrencyShortcut();
             } else if (currentCategory === "Miles") {
-                populateSelects(Object.keys(milesPrograms), initialFrom || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
+                populateSelects(Object.keys(milesPrograms), initialFrom || "American", savedTo || "USD ($ US Dollar)");
             }
 
             if (urlArgs) {
