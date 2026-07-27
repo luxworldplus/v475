@@ -1525,7 +1525,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentCategory === "Miles") {
                 const savedFrom = localStorage.getItem("metric_from_Miles");
                 const savedTo = localStorage.getItem("metric_to_Miles");
-                populateSelects(Object.keys(milesPrograms), savedFrom || Object.keys(milesPrograms)[1] || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
+                populateSelects(Object.keys(milesPrograms), savedFrom || Object.keys(milesPrograms)[1] || "American", savedTo || "USD ($ US Dollar)");
             }
         }
     }
