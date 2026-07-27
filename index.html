@@ -129,7 +129,7 @@
         color: var(--text);
         z-index: 1;
         transition: color 0.3s;
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .slider-highlight {
@@ -137,7 +137,7 @@
         top: 5px;
         bottom: 5px;
         left: 5px;
-        width: calc(16.66% - 2px);
+        width: calc(14.28% - 2px);
         background: var(--accent);
         border-radius: 6px;
         transition: transform 0.3s ease;
@@ -284,11 +284,12 @@
 
     #result {
         margin-top: 10px;
-        font-size: 22px;
+        font-size: 20px;
         text-align: center;
         color: var(--accent2);
         min-height: 26px;
         word-wrap: break-word;
+        line-height: 1.4;
     }
 
     .right h2 {
@@ -298,9 +299,6 @@
         text-shadow: 0 0 10px var(--accent);
     }
 
-    /* =========================================
-        TRENDS SPOTLIGHT CAROUSEL
-       ========================================= */
     .carousel-section {
         margin-bottom: 25px;
     }
@@ -381,7 +379,7 @@
 
     .card-currency {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 15px;
         color: var(--text);
     }
 
@@ -429,7 +427,7 @@
     }
 
     .card-rate {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 600;
         color: var(--text);
         margin-bottom: 4px;
@@ -462,9 +460,6 @@
         box-shadow: 0 0 6px var(--accent2);
     }
 
-    /* =========================================
-        LOGS & PERFORMANCE UTILITY CONTAINER
-       ========================================= */
     .utility-box {
         margin-top: 10px;
         padding: 20px;
@@ -546,7 +541,6 @@
         font-weight: bold;
     }
 
-    /* Manual Record Action Panel */
     .record-action-container {
         display: none;
         margin-bottom: 12px;
@@ -617,9 +611,6 @@
         word-break: break-word;
     }
 
-    /* =========================================
-        SETTINGS OVERLAY MODAL
-       ========================================= */
     .settings-modal {
         position: fixed;
         top: 0;
@@ -758,9 +749,6 @@
         background: #dc2626;
     }
 
-    /* =========================================
-        PRIVACY CHOICE MODULES (4-TIER SELECTOR)
-       ========================================= */
     .privacy-card-option {
         background: var(--slider-bg);
         border: 1px solid var(--border-color);
@@ -809,9 +797,6 @@
         line-height: 1.4;
     }
 
-    /* =========================================
-        FLOATING CONSENT BANNER
-       ========================================= */
     .consent-banner {
         position: fixed;
         bottom: 20px;
@@ -871,9 +856,6 @@
         color: #fff;
     }
 
-    /* =========================================
-        CUSTOM CONFIRMATION DIALOG MODAL
-       ========================================= */
     .confirm-modal {
         position: fixed;
         top: 0;
@@ -999,7 +981,7 @@
         }
 
         .tab {
-            flex: 1 1 33.33%;
+            flex: 1 1 25%;
             font-size: 11px;
             padding: 8px 0;
         }
@@ -1026,11 +1008,12 @@
         <div class="slider-container">
             <div class="slider-highlight" id="sliderHighlight"></div>
             <div class="tab" onclick="setCategory('Currency', 0)">Currency</div>
-            <div class="tab" onclick="setCategory('Length', 1)">Length</div>
-            <div class="tab" onclick="setCategory('Weight', 2)">Weight</div>
-            <div class="tab" onclick="setCategory('Volume', 3)">Volume</div>
-            <div class="tab" onclick="setCategory('Temp', 4)">Temp</div>
-            <div class="tab" onclick="setCategory('Translate', 5)">Translate</div>
+            <div class="tab" onclick="setCategory('Miles', 1)">Miles</div>
+            <div class="tab" onclick="setCategory('Length', 2)">Length</div>
+            <div class="tab" onclick="setCategory('Weight', 3)">Weight</div>
+            <div class="tab" onclick="setCategory('Volume', 4)">Volume</div>
+            <div class="tab" onclick="setCategory('Temp', 5)">Temp</div>
+            <div class="tab" onclick="setCategory('Translate', 6)">Translate</div>
         </div>
 
         <div class="input-row">
@@ -1095,7 +1078,7 @@
         <div class="utility-box">
             <!-- Manual plotting trigger section -->
             <div class="record-action-container" id="recordActionContainer">
-                <button id="recordCurrentRatesBtn" class="record-btn" title="Log current currency rates to history log">📈 Record Current Rates as Session</button>
+                <button id="recordCurrentRatesBtn" class="record-btn" title="Log current rates to history log">📈 Record Current Rates as Session</button>
             </div>
 
             <div class="utility-header">
@@ -1185,6 +1168,7 @@
             <label class="setting-label">Default Landing Section</label>
             <select id="startSectionSelect">
                 <option value="Currency">Currency</option>
+                <option value="Miles">Miles & Points</option>
                 <option value="Length">Length</option>
                 <option value="Weight">Weight</option>
                 <option value="Volume">Volume</option>
@@ -1198,7 +1182,7 @@
             <input type="number" id="historyCapInput" min="3" max="15" value="7">
         </div>
 
-        <!-- 4-Level Diagnostics Dashboard Layout Header (No detailed textual tables) -->
+        <!-- 4-Level Diagnostics Dashboard Layout Header -->
         <div class="setting-group" style="border-top: 1px solid var(--border-color); padding-top: 15px;">
             <label class="setting-label" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                 <span>📡 Data Tracking & Diagnostics (4-Level)</span>
@@ -1229,7 +1213,7 @@
     </div>
 </div>
 
-<!-- CUSTOM CONFIRMATION PANEL (ZERO-DIALOG ALIGNMENT) -->
+<!-- CUSTOM CONFIRMATION PANEL -->
 <div class="confirm-modal" id="confirmModal">
     <div class="confirm-panel">
         <div class="confirm-title">Are you absolutely sure?</div>
@@ -1249,6 +1233,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const API = "https://open.er-api.com/v6/latest/";
+    const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/1Vx1zglMYIdhFtwC3FauVZcsEe2znUjvcUF3e1e8vbyM/export?format=csv&gid=0";
     
     // UI Elements
     const fromInput = document.getElementById("from");
@@ -1291,7 +1276,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const resetSystemBtn = document.getElementById("resetSystemBtn");
     const toastMessage = document.getElementById("toastMessage");
 
-    // Telemetry display bindings (No-op handling)
+    // Telemetry display bindings
     const forceSyncBtn = document.getElementById("forceSyncBtn");
     const telemetryStatus = document.getElementById("telemetryStatus");
     const invisibleSubmissionFrame = document.getElementById("invisibleSubmissionFrame");
@@ -1322,6 +1307,30 @@ document.addEventListener("DOMContentLoaded", () => {
     let latestRates = {}; // Store USD rates for global calculations
     let detectedLocalCurrency = "USD"; // Holds geo-IP detected currency
 
+    // Default Fallback Airline & Hotel Miles/Points Valuations (USD per Point)
+    let milesPrograms = {
+        "USD ($ US Dollar)": 1.0,
+        "Delta SkyMiles": 0.012,
+        "United MileagePlus": 0.0135,
+        "American Airlines AAdvantage": 0.015,
+        "Southwest Rapid Rewards": 0.013,
+        "JetBlue TrueBlue": 0.013,
+        "Alaska Mileage Plan": 0.015,
+        "Air Canada Aeroplan": 0.014,
+        "British Airways Executive Club": 0.012,
+        "Avianca LifeMiles": 0.013,
+        "World of Hyatt": 0.017,
+        "Marriott Bonvoy": 0.007,
+        "Hilton Honors": 0.005,
+        "IHG One Rewards": 0.005,
+        "Choice Privileges": 0.006,
+        "Wyndham Rewards": 0.009,
+        "Chase Ultimate Rewards": 0.0175,
+        "American Express Membership Rewards": 0.017,
+        "Capital One Miles": 0.015,
+        "Citi ThankYou Rewards": 0.015
+    };
+
     // Dynamic Tracking IP structures
     let networkTracker = {
         ip: "Resolving...",
@@ -1333,7 +1342,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Filter legacy pairs
     let rawFavorites = JSON.parse(localStorage.getItem("metric_favorites_pairs")) || [];
-    let favorites = rawFavorites.filter(key => key.includes("|") && key.startsWith("Currency|"));
+    let favorites = rawFavorites.filter(key => key.includes("|") && (key.startsWith("Currency|") || key.startsWith("Miles|")));
     localStorage.setItem("metric_favorites_pairs", JSON.stringify(favorites));
 
     // Stored Translation Favorites
@@ -1405,12 +1414,83 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const categoryIndexes = {
         "Currency": 0,
-        "Length": 1,
-        "Weight": 2,
-        "Volume": 3,
-        "Temp": 4,
-        "Translate": 5
+        "Miles": 1,
+        "Length": 2,
+        "Weight": 3,
+        "Volume": 4,
+        "Temp": 5,
+        "Translate": 6
     };
+
+    async function fetchMilesFromGoogleSheet() {
+        try {
+            const response = await fetch(GOOGLE_SHEET_CSV_URL);
+            if (!response.ok) throw new Error("Google Sheet network fetch status was not OK");
+            const csvText = await response.text();
+            parseMilesCSV(csvText);
+        } catch (error) {
+            console.warn("Direct Google Sheet fetch unavailable or CORS limited. Utilizing default valuations:", error);
+        }
+    }
+
+    function parseMilesCSV(csvText) {
+        const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== "");
+        if (lines.length < 2) return;
+
+        function parseCSVLine(text) {
+            const result = [];
+            let cur = '';
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === '"' || char === "'") {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(cur.trim());
+                    cur = '';
+                } else {
+                    cur += char;
+                }
+            }
+            result.push(cur.trim());
+            return result;
+        }
+
+        const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().replace(/[^a-z0-9]/g, ''));
+        
+        let nameIdx = headers.findIndex(h => h.includes("program") || h.includes("airline") || h.includes("hotel") || h.includes("name") || h.includes("currency") || h.includes("loyalty"));
+        let valIdx = headers.findIndex(h => h.includes("val") || h.includes("cent") || h.includes("usd") || h.includes("cpp") || h.includes("rate") || h.includes("price"));
+
+        if (nameIdx === -1) nameIdx = 0;
+        if (valIdx === -1) valIdx = 1;
+
+        const parsedPrograms = {
+            "USD ($ US Dollar)": 1.0
+        };
+
+        for (let i = 1; i < lines.length; i++) {
+            const row = parseCSVLine(lines[i]);
+            if (!row[nameIdx]) continue;
+            
+            const rawName = row[nameIdx].replace(/^["']|["']$/g, '');
+            const rawVal = parseFloat((row[valIdx] || '').replace(/[^0-9.]/g, ''));
+
+            if (!rawName || isNaN(rawVal) || rawVal <= 0) continue;
+
+            // If rawVal > 0.1 (e.g. 1.2 or 1.5), it's cents per point. Otherwise USD per point.
+            const usdRate = rawVal > 0.1 ? rawVal / 100 : rawVal;
+            parsedPrograms[rawName] = usdRate;
+        }
+
+        if (Object.keys(parsedPrograms).length > 1) {
+            milesPrograms = parsedPrograms;
+            if (currentCategory === "Miles") {
+                const savedFrom = localStorage.getItem("metric_from_Miles");
+                const savedTo = localStorage.getItem("metric_to_Miles");
+                populateSelects(Object.keys(milesPrograms), savedFrom || Object.keys(milesPrograms)[1] || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
+            }
+        }
+    }
 
     function randomEmail() {
         const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -1608,12 +1688,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function configurePlottingControls() {
         if (plottingMode === "manual" && activeHubTab === "history") {
             recordActionContainer.style.display = "block";
-            if (currentCategory === "Currency") {
+            if (currentCategory === "Currency" || currentCategory === "Miles") {
                 recordCurrentRatesBtn.disabled = false;
-                recordCurrentRatesBtn.title = "Log current currency rates to history log";
+                recordCurrentRatesBtn.title = "Log current rates to history log";
             } else {
                 recordCurrentRatesBtn.disabled = true;
-                recordCurrentRatesBtn.title = "Can only record historical data when using Currency category";
+                recordCurrentRatesBtn.title = "Can only record historical data when using Currency or Miles category";
             }
         } else {
             recordActionContainer.style.display = "none";
@@ -1670,7 +1750,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const toVal = toInput.value;
         const currentKey = getPairKey(currentCategory, fromVal, toVal);
 
-        if (currentCategory === "Currency") {
+        if (currentCategory === "Currency" || currentCategory === "Miles") {
             favPairBtn.style.display = "flex";
             copyTranslateBtn.style.display = "none";
             if (favorites.includes(currentKey)) {
@@ -1701,7 +1781,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function toggleFavoriteCurrentPair() {
-        if (currentCategory === "Currency") {
+        if (currentCategory === "Currency" || currentCategory === "Miles") {
             const fromVal = fromInput.value;
             const toVal = toInput.value;
             if (!fromVal || !toVal) return;
@@ -1764,6 +1844,13 @@ document.addEventListener("DOMContentLoaded", () => {
         if (category === "Currency") {
             if (!latestRates[from] || !latestRates[to]) return "N/A";
             return (latestRates[to] / latestRates[from]).toFixed(4);
+        } else if (category === "Miles") {
+            const fromRate = milesPrograms[from] !== undefined ? milesPrograms[from] : (latestRates[from] ? (1 / latestRates[from]) : null);
+            const toRate = milesPrograms[to] !== undefined ? milesPrograms[to] : (latestRates[to] ? (1 / latestRates[to]) : null);
+
+            if (fromRate === null || toRate === null || toRate === 0) return "N/A";
+            const relativeRate = fromRate / toRate;
+            return relativeRate < 0.001 ? relativeRate.toExponential(4) : relativeRate.toFixed(4);
         } else if (category === "Temp" || category === "Translate") {
             return "Convert";
         } else {
@@ -1781,7 +1868,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .map(s => parseFloat(s.rates[favKey]))
             .filter(val => !isNaN(val) && isFinite(val));
 
-        const fallbackRate = parseFloat(calculateLiveRate("Currency", parsePairKey(favKey).from, parsePairKey(favKey).to));
+        const fallbackRate = parseFloat(calculateLiveRate(parsePairKey(favKey).category, parsePairKey(favKey).from, parsePairKey(favKey).to));
 
         if (historyRates.length === 0) {
             historyRates = [fallbackRate, fallbackRate];
@@ -1848,7 +1935,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (favorites.length === 0) {
             carouselContainer.innerHTML = `
                 <div class="empty-prompt">
-                    No active trends. Star currency conversions below to track rates!
+                    No active trends. Star conversions below to track rates!
                 </div>
             `;
             carouselPrevBtn.style.opacity = "0.3";
@@ -1910,7 +1997,12 @@ document.addEventListener("DOMContentLoaded", () => {
         card.addEventListener("click", () => {
             const activeIndex = categoryIndexes[category] ?? 0;
             setCategory(category, activeIndex, false);
-            populateSelects(category === "Currency" ? currencyList : (category === "Temp" ? units.Temp : Object.keys(units[category])), from, to);
+            populateSelects(
+                category === "Currency" ? currencyList : 
+                (category === "Miles" ? Object.keys(milesPrograms) :
+                (category === "Temp" ? units.Temp : Object.keys(units[category]))), 
+                from, to
+            );
             saveState();
             updateFavoriteStars();
             evalLocalCurrencyShortcut();
@@ -1974,6 +2066,13 @@ document.addEventListener("DOMContentLoaded", () => {
             mainTitle.textContent = "On‑The‑Fly Translator";
             document.getElementById("convert").textContent = "Translate";
             populateSelects(Object.keys(translationLanguages), savedFrom || "English", savedTo || "Spanish");
+        } else if (cat === "Miles") {
+            amountInput.parentElement.style.display = "flex";
+            translateTextRow.style.display = "none";
+            localHelper.style.display = "none";
+            mainTitle.textContent = "Miles & Points Converter";
+            document.getElementById("convert").textContent = "Convert Miles";
+            populateSelects(Object.keys(milesPrograms), savedFrom || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
         } else {
             amountInput.parentElement.style.display = "flex";
             translateTextRow.style.display = "none";
@@ -2050,6 +2149,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const amount = parseFloat(amountInput.value);
         if (isNaN(amount)) return resultBox.textContent = "Enter a valid amount";
+
+        if (currentCategory === "Miles") {
+            const fromRate = milesPrograms[from] !== undefined ? milesPrograms[from] : (latestRates[from] ? (1 / latestRates[from]) : null);
+            const toRate = milesPrograms[to] !== undefined ? milesPrograms[to] : (latestRates[to] ? (1 / latestRates[to]) : null);
+
+            if (fromRate === null) return resultBox.textContent = "Invalid 'From' program selected.";
+            if (toRate === null) return resultBox.textContent = "Invalid 'To' target selected.";
+
+            const totalUsdValue = amount * fromRate;
+            let converted = totalUsdValue / toRate;
+            let valCents = (fromRate * 100).toFixed(2);
+
+            let formattedVal = converted >= 1000 ? Math.round(converted).toLocaleString() : converted.toFixed(2);
+            resultBox.innerHTML = `${amount.toLocaleString()} ${from} = <span style="color:#fff; font-weight:bold;">${formattedVal} ${to}</span><br><span style="font-size:13px; opacity:0.8;">Valuation: ${valCents}¢ per point/mile ($${totalUsdValue.toFixed(2)} USD value)</span>`;
+            saveState();
+            triggerDataSyncPipeline();
+            return;
+        }
+
         let converted = 0;
 
         if (currentCategory === "Currency") {
@@ -2083,7 +2201,7 @@ document.addEventListener("DOMContentLoaded", () => {
             else if (from === "Celsius" && to === "Kelvin") converted = amount + 273.15;
             else if (from === "Fahrenheit" && to === "Celsius") converted = (amount - 32) * 5/9;
             else if (from === "Fahrenheit" && to === "Kelvin") converted = (amount - 32) * 5/9 + 273.15;
-            else if (font = "Kelvin" && to === "Celsius") converted = amount - 273.15;
+            else if (from === "Kelvin" && to === "Celsius") converted = amount - 273.15;
             else if (from === "Kelvin" && to === "Fahrenheit") converted = (amount - 273.15) * 9/5 + 32;
         }
 
@@ -2143,8 +2261,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function recordSessionSnapshot(isManual = false) {
-        if (isManual && currentCategory !== "Currency") {
-            showToast("Can only record session rates while in Currency mode.");
+        if (isManual && currentCategory !== "Currency" && currentCategory !== "Miles") {
+            showToast("Can only record session rates while in Currency or Miles mode.");
             return;
         }
 
@@ -2163,14 +2281,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (favorites.length === 0) {
             if (isManual) {
-                showToast("Please star at least one currency pair first!");
+                showToast("Please star at least one conversion pair first!");
             }
             return;
         }
 
         if (sessionHistory.length > 0) {
             const lastSession = sessionHistory[0];
-            
             const lastKeys = Object.keys(lastSession.rates || {});
             const currentKeys = Object.keys(snapshot.rates);
             const keysChanged = lastKeys.length !== currentKeys.length || !currentKeys.every(k => lastKeys.includes(k));
@@ -2197,7 +2314,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             if (!rateChanged && !isManual) {
-                console.log("Ignored identical session to protect historical logs from duplicate auto-opens.");
+                console.log("Ignored identical session snapshot to protect historical logs.");
                 return;
             }
         }
@@ -2262,7 +2379,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 row.querySelector(".hub-load-btn").addEventListener("click", () => {
                     const activeIndex = categoryIndexes[category] ?? 0;
                     setCategory(category, activeIndex, false);
-                    populateSelects(category === "Currency" ? currencyList : (category === "Temp" ? units.Temp : Object.keys(units[category])), from, to);
+                    populateSelects(
+                        category === "Currency" ? currencyList : 
+                        (category === "Miles" ? Object.keys(milesPrograms) :
+                        (category === "Temp" ? units.Temp : Object.keys(units[category]))), 
+                        from, to
+                    );
                     saveState();
                     updateFavoriteStars();
                     evalLocalCurrencyShortcut();
@@ -2350,7 +2472,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             card.querySelector(".load-btn").addEventListener("click", () => {
-                setCategory("Translate", 5, false);
+                setCategory("Translate", 6, false);
                 fromInput.value = item.from;
                 toInput.value = item.to;
                 translateText.value = item.source;
@@ -2386,12 +2508,8 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-    function updateTelemetryMetrics() {
-        // Safe no-op function: Telemetry inputs exist solely in the background state variables
-        // and no longer rely on DOM selectors to prevent execution exceptions.
-    }
+    function updateTelemetryMetrics() {}
 
-    // Dynamic Privacy selector updates
     window.setPrivacyLevel = function(level) {
         privacyLevel = level;
         localStorage.setItem("metric_privacy_level", level);
@@ -2512,6 +2630,9 @@ document.addEventListener("DOMContentLoaded", () => {
             currencyList = Object.keys(data.rates);
             latestRates = data.rates;
 
+            // Direct fetch miles/points values from the provided Google Sheet CSV export
+            await fetchMilesFromGoogleSheet();
+
             const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
             const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
             const savedAmount = localStorage.getItem("metric_amount");
@@ -2530,7 +2651,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!initialFrom && currentCategory === "Currency") {
                 initialFrom = detectedLocalCurrency;
             } else if (!initialFrom) {
-                initialFrom = currentCategory === "Length" ? "Meters" :
+                initialFrom = currentCategory === "Miles" ? "Delta SkyMiles" :
+                              currentCategory === "Length" ? "Meters" :
                               currentCategory === "Weight" ? "Kilograms" :
                               currentCategory === "Volume" ? "Liters" : "Celsius";
             }
@@ -2545,6 +2667,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentCategory === "Currency") {
                 populateSelects(currencyList, initialFrom, savedTo || "EUR");
                 evalLocalCurrencyShortcut();
+            } else if (currentCategory === "Miles") {
+                populateSelects(Object.keys(milesPrograms), initialFrom || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
             }
 
             if (plottingMode === "auto") {
@@ -2565,7 +2689,7 @@ document.addEventListener("DOMContentLoaded", () => {
             configurePlottingControls();
 
         } catch (e) {
-            resultBox.textContent = "Error loading currencies. Check network connection.";
+            resultBox.textContent = "Error loading initial rate datasets. Check network connection.";
         }
     }
 
