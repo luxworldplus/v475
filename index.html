@@ -292,6 +292,24 @@
         line-height: 1.4;
     }
 
+    .powered-by-banner {
+        margin-top: 12px;
+        font-size: 13px;
+        text-align: center;
+        color: var(--text);
+        opacity: 0.9;
+    }
+
+    .powered-by-banner a {
+        color: var(--accent2);
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    .powered-by-banner a:hover {
+        color: #fff;
+    }
+
     .right h2 {
         margin-top: 0;
         font-size: 28px;
@@ -1048,6 +1066,9 @@
         </div>
 
         <div id="result"></div>
+        <div id="poweredByBanner" class="powered-by-banner">
+            Powered by <a href="https://metric.luxworldplus.com" target="_blank" rel="noopener">metric.luxworldplus.com</a>
+        </div>
     </div>
 
     <div class="right">
@@ -1244,6 +1265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const translateText = document.getElementById("translateText");
     const translateTextRow = document.getElementById("translateTextRow");
     const resultBox = document.getElementById("result");
+    const poweredByBanner = document.getElementById("poweredByBanner");
     const mainTitle = document.getElementById("mainTitle");
     const sliderHighlight = document.getElementById("sliderHighlight");
     const carouselContainer = document.getElementById("carouselContainer");
@@ -1422,6 +1444,45 @@ document.addEventListener("DOMContentLoaded", () => {
         "Translate": 6
     };
 
+    // Helper to support URL Query Params like metric.luxworldplus.com/?m=currency&_USD_EUR_1 or ?m=miles&_Delta_USD_1000
+    function parseURLParameters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let categoryArg = urlParams.get("m");
+        let queryData = null;
+
+        urlParams.forEach((val, key) => {
+            if (key.startsWith("_")) {
+                queryData = key.substring(1); // remove leading _
+            }
+        });
+
+        if (!categoryArg && window.location.search.includes("_")) {
+            categoryArg = "currency";
+        }
+
+        if (categoryArg) {
+            const catLower = categoryArg.toLowerCase();
+            let matchedCategory = "Currency";
+            if (catLower.includes("mile") || catLower.includes("point")) matchedCategory = "Miles";
+            else if (catLower.includes("len")) matchedCategory = "Length";
+            else if (catLower.includes("weight")) matchedCategory = "Weight";
+            else if (catLower.includes("vol")) matchedCategory = "Volume";
+            else if (catLower.includes("temp")) matchedCategory = "Temp";
+            else if (catLower.includes("trans")) matchedCategory = "Translate";
+
+            let p1 = null, p2 = null, p3 = null;
+            if (queryData) {
+                const parts = queryData.split("_");
+                p1 = parts[0] ? decodeURIComponent(parts[0]) : null;
+                p2 = parts[1] ? decodeURIComponent(parts[1]) : null;
+                p3 = parts[2] ? decodeURIComponent(parts[2]) : null;
+            }
+
+            return { category: matchedCategory, from: p1, to: p2, amount: p3 };
+        }
+        return null;
+    }
+
     async function fetchMilesFromGoogleSheet() {
         try {
             const response = await fetch(GOOGLE_SHEET_CSV_URL);
@@ -1477,7 +1538,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!rawName || isNaN(rawVal) || rawVal <= 0) continue;
 
-            // If rawVal > 0.1 (e.g. 1.2 or 1.5), it's cents per point. Otherwise USD per point.
             const usdRate = rawVal > 0.1 ? rawVal / 100 : rawVal;
             parsedPrograms[rawName] = usdRate;
         }
@@ -1663,7 +1723,6 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("metric_session_cap", cap);
     });
 
-    // Zero-Dialog Reset triggers
     resetSystemBtn.addEventListener("click", () => {
         confirmModal.style.display = "flex";
     });
@@ -1719,8 +1778,12 @@ document.addEventListener("DOMContentLoaded", () => {
             fromList.innerHTML += `<option value="${item}"></option>`;
             toList.innerHTML += `<option value="${item}"></option>`;
         });
-        fromInput.value = defaultFrom || list[0];
-        toInput.value = defaultTo || list[1] || list[0];
+        
+        let matchFrom = list.find(i => i.toLowerCase() === (defaultFrom || "").toLowerCase()) || defaultFrom || list[0];
+        let matchTo = list.find(i => i.toLowerCase() === (defaultTo || "").toLowerCase()) || defaultTo || list[1] || list[0];
+        
+        fromInput.value = matchFrom;
+        toInput.value = matchTo;
     }
 
     function evalLocalCurrencyShortcut() {
@@ -2147,8 +2210,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        const amount = parseFloat(amountInput.value);
-        if (isNaN(amount)) return resultBox.textContent = "Enter a valid amount";
+        const amount = parseFloat(amountInput.value || 1);
 
         if (currentCategory === "Miles") {
             const fromRate = milesPrograms[from] !== undefined ? milesPrograms[from] : (latestRates[from] ? (1 / latestRates[from]) : null);
@@ -2171,17 +2233,22 @@ document.addEventListener("DOMContentLoaded", () => {
         let converted = 0;
 
         if (currentCategory === "Currency") {
-            if (!currencyList.includes(from) || !currencyList.includes(to)) {
-                return resultBox.textContent = "Please select valid currency codes.";
-            }
-            try {
-                const res = await fetch(API + from);
-                const data = await res.json();
-                const rate = data.rates[to];
-                if (!rate) throw new Error("Invalid rate");
+            let fromKey = Object.keys(latestRates).find(k => k.toLowerCase() === from.toLowerCase()) || from.toUpperCase();
+            let toKey = Object.keys(latestRates).find(k => k.toLowerCase() === to.toLowerCase()) || to.toUpperCase();
+
+            if (!latestRates[fromKey] || !latestRates[toKey]) {
+                try {
+                    const res = await fetch(API + fromKey);
+                    const data = await res.json();
+                    const rate = data.rates[toKey];
+                    if (!rate) throw new Error("Invalid rate");
+                    converted = amount * rate;
+                } catch {
+                    return resultBox.textContent = "Conversion API Error.";
+                }
+            } else {
+                const rate = latestRates[toKey] / latestRates[fromKey];
                 converted = amount * rate;
-            } catch {
-                return resultBox.textContent = "Conversion API Error.";
             }
         } 
         else if (currentCategory === "Length" || currentCategory === "Weight" || currentCategory === "Volume") {
@@ -2212,7 +2279,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formattedStr = Math.round(converted * 100000000) / 100000000;
         }
 
-        resultBox.textContent = `${amount} ${from} = ${formattedStr} ${to}`;
+        resultBox.textContent = `${amount} ${from.toUpperCase()} = ${formattedStr} ${to.toUpperCase()}`;
         saveState();
         triggerDataSyncPipeline();
     }
@@ -2630,12 +2697,15 @@ document.addEventListener("DOMContentLoaded", () => {
             currencyList = Object.keys(data.rates);
             latestRates = data.rates;
 
-            // Direct fetch miles/points values from the provided Google Sheet CSV export
+            // Direct fetch miles/points values from Google Sheet CSV
             await fetchMilesFromGoogleSheet();
 
-            const savedFrom = localStorage.getItem(`metric_from_${currentCategory}`);
-            const savedTo = localStorage.getItem(`metric_to_${currentCategory}`);
-            const savedAmount = localStorage.getItem("metric_amount");
+            // Check for URL parameters (e.g. ?m=currency&_USD_EUR_1)
+            const urlArgs = parseURLParameters();
+
+            const savedFrom = urlArgs?.from || localStorage.getItem(`metric_from_${currentCategory}`);
+            const savedTo = urlArgs?.to || localStorage.getItem(`metric_to_${currentCategory}`);
+            const savedAmount = urlArgs?.amount || localStorage.getItem("metric_amount");
             const savedTranslateText = localStorage.getItem("metric_translate_text");
 
             if (savedAmount) amountInput.value = savedAmount;
@@ -2644,6 +2714,12 @@ document.addEventListener("DOMContentLoaded", () => {
             detectedLocalCurrency = await detectLocalCurrency();
             if (!currencyList.includes(detectedLocalCurrency)) {
                 detectedLocalCurrency = "USD";
+            }
+
+            if (urlArgs && urlArgs.category) {
+                currentCategory = urlArgs.category;
+            } else if (!localStorage.getItem("metric_category") && defaultStartingTab) {
+                currentCategory = defaultStartingTab;
             }
 
             let initialFrom = savedFrom;
@@ -2657,10 +2733,6 @@ document.addEventListener("DOMContentLoaded", () => {
                               currentCategory === "Volume" ? "Liters" : "Celsius";
             }
 
-            if (!localStorage.getItem("metric_category") && defaultStartingTab) {
-                currentCategory = defaultStartingTab;
-            }
-
             const activeIndex = categoryIndexes[currentCategory] ?? 0;
             setCategory(currentCategory, activeIndex, false); 
 
@@ -2669,6 +2741,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 evalLocalCurrencyShortcut();
             } else if (currentCategory === "Miles") {
                 populateSelects(Object.keys(milesPrograms), initialFrom || "Delta SkyMiles", savedTo || "USD ($ US Dollar)");
+            }
+
+            if (urlArgs) {
+                if (urlArgs.from) fromInput.value = urlArgs.from;
+                if (urlArgs.to) toInput.value = urlArgs.to;
+                if (urlArgs.amount) amountInput.value = urlArgs.amount;
+                convert();
             }
 
             if (plottingMode === "auto") {
