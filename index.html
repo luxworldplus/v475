@@ -1307,9 +1307,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let latestRates = {}; // Store USD rates for global calculations
     let detectedLocalCurrency = "USD"; // Holds geo-IP detected currency
 
+    // Comprehensive currency name mapping dictionary
+    const currencyNames = {
+        "USD": "$ US Dollar", "EUR": "€ Euro", "GBP": "£ British Pound", "JPY": "¥ Japanese Yen",
+        "AUD": "A$ Australian Dollar", "CAD": "C$ Canadian Dollar", "CHF": "Fr Swiss Franc",
+        "CNY": "¥ Chinese Yuan", "HKD": "HK$ Hong Kong Dollar", "NZD": "NZ$ New Zealand Dollar",
+        "SEK": "kr Swedish Krona", "KRW": "₩ South Korean Won", "SGD": "S$ Singapore Dollar",
+        "NOK": "kr Norwegian Krone", "MXN": "$ Mexican Peso", "INR": "₹ Indian Rupee",
+        "RUB": "₽ Russian Ruble", "ZAR": "R South African Rand", "TRY": "₺ Turkish Lira",
+        "BRL": "R$ Brazilian Real", "TWD": "NT$ New Taiwan Dollar", "DKK": "kr Danish Krone",
+        "PLN": "zł Polish Zloty", "THB": "฿ Thai Baht", "IDR": "Rp Indonesian Rupiah",
+        "HUF": "Ft Hungarian Forint", "CZK": "Kč Czech Koruna", "ILS": "₪ Israeli Shekel",
+        "CLP": "CLP$ Chilean Peso", "PHP": "₱ Philippine Peso", "AED": "AED UAE Dirham",
+        "COP": "COL$ Colombian Peso", "SAR": "SR Saudi Riyal", "MYR": "RM Malaysian Ringgit",
+        "RON": "lei Romanian Leu", "EGP": "E£ Egyptian Pound", "BGN": "лв Bulgarian Lev",
+        "PKR": "₨ Pakistani Rupee", "VND": "₫ Vietnamese Dong", "KWD": "KD Kuwaiti Dinar",
+        "QAR": "QR Qatari Riyal", "OAR": "OMR Omani Rial", "BHD": "BD Bahraini Dinar",
+        "ISK": "kr Icelandic Króna", "ARS": "ARS$ Argentine Peso"
+    };
+
     // Default Fallback Airline & Hotel Miles/Points Valuations (USD per Point)
     let milesPrograms = {
-        "USD ($ US Dollar)": 1.0,
+        "USD": 1.0,
         "Delta SkyMiles": 0.012,
         "United MileagePlus": 0.0135,
         "American Airlines AAdvantage": 0.015,
@@ -1422,7 +1441,19 @@ document.addEventListener("DOMContentLoaded", () => {
         "Translate": 6
     };
 
-    // Helper to support URL Query Params like metric.luxworldplus.com/?m=currency&_USD_EUR_1 or ?m=miles&_Delta_USD_1000
+    // Utility: Extract 3-letter currency code or normalized key
+    function extractCode(val) {
+        if (!val) return "";
+        let trimmed = val.trim();
+        // Check if trimmed starts with a known 3-4 letter currency code followed by space, bracket, or string end
+        let match = trimmed.match(/^([A-Za-z]{3,4})(?:\s|\(|$)/);
+        if (match && currencyNames[match[1].toUpperCase()]) {
+            return match[1].toUpperCase();
+        }
+        return trimmed;
+    }
+
+    // Helper to support URL Query Params like metric.luxworldplus.com/?m=currency&_USD_EUR_1
     function parseURLParameters() {
         const urlParams = new URLSearchParams(window.location.search);
         let categoryArg = urlParams.get("m");
@@ -1430,7 +1461,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         urlParams.forEach((val, key) => {
             if (key.startsWith("_")) {
-                queryData = key.substring(1); // remove leading _
+                queryData = key.substring(1); 
             }
         });
 
@@ -1504,7 +1535,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (valIdx === -1) valIdx = 1;
 
         const parsedPrograms = {
-            "USD ($ US Dollar)": 1.0
+            "USD": 1.0
         };
 
         for (let i = 1; i < lines.length; i++) {
@@ -1525,7 +1556,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (currentCategory === "Miles") {
                 const savedFrom = localStorage.getItem("metric_from_Miles");
                 const savedTo = localStorage.getItem("metric_to_Miles");
-                populateSelects(Object.keys(milesPrograms), savedFrom || Object.keys(milesPrograms)[1] || "American", savedTo || "USD ($ US Dollar)");
+                populateSelects(Object.keys(milesPrograms), savedFrom || Object.keys(milesPrograms)[1] || "Delta", savedTo || "USD");
             }
         }
     }
@@ -1744,28 +1775,52 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             localStorage.setItem("metric_translate_text", translateText.value);
         }
-        localStorage.setItem(`metric_from_${currentCategory}`, fromInput.value);
-        localStorage.setItem(`metric_to_${currentCategory}`, toInput.value);
+        localStorage.setItem(`metric_from_${currentCategory}`, extractCode(fromInput.value));
+        localStorage.setItem(`metric_to_${currentCategory}`, extractCode(toInput.value));
         updateTelemetryMetrics();
     }
 
     function populateSelects(list, defaultFrom, defaultTo) {
         fromList.innerHTML = "";
         toList.innerHTML = "";
+        
         list.forEach(item => {
-            fromList.innerHTML += `<option value="${item}"></option>`;
-            toList.innerHTML += `<option value="${item}"></option>`;
+            let displayVal = item;
+            
+            if (currentCategory === "Currency") {
+                const desc = currencyNames[item] || item;
+                displayVal = `${item} (${desc})`;
+            }
+            
+            fromList.innerHTML += `<option value="${displayVal}">${displayVal}</option>`;
+            toList.innerHTML += `<option value="${displayVal}">${displayVal}</option>`;
         });
         
-        let matchFrom = list.find(i => i.toLowerCase() === (defaultFrom || "").toLowerCase()) || defaultFrom || list[0];
-        let matchTo = list.find(i => i.toLowerCase() === (defaultTo || "").toLowerCase()) || defaultTo || list[1] || list[0];
+        let cleanDefaultFrom = extractCode(defaultFrom);
+        let cleanDefaultTo = extractCode(defaultTo);
+
+        let matchFrom = list.find(i => extractCode(i) === cleanDefaultFrom) || defaultFrom || list[0];
+        let matchTo = list.find(i => extractCode(i) === cleanDefaultTo) || defaultTo || list[1] || list[0];
         
-        fromInput.value = matchFrom;
-        toInput.value = matchTo;
+        fromInput.value = extractCode(matchFrom);
+        toInput.value = extractCode(matchTo);
+    }
+
+    // Normalizes typed/selected input from option "USD ($ US Dollar)" to "USD" automatically
+    function normalizeCurrencyInput(inputEl) {
+        let raw = inputEl.value;
+        if (!raw) return;
+        let code = extractCode(raw);
+        if (currentCategory === "Currency") {
+            if (currencyList.some(c => c.toUpperCase() === code)) {
+                inputEl.value = code;
+            }
+        }
     }
 
     function evalLocalCurrencyShortcut() {
-        if (currentCategory === "Currency" && fromInput.value !== detectedLocalCurrency) {
+        let currentFrom = extractCode(fromInput.value);
+        if (currentCategory === "Currency" && currentFrom !== detectedLocalCurrency) {
             detectedLocalCodeSpan.textContent = detectedLocalCurrency;
             localHelper.style.display = "flex";
         } else {
@@ -1774,7 +1829,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getPairKey(category, fromUnit, toUnit) {
-        return `${category}|${fromUnit}|${toUnit}`;
+        return `${category}|${extractCode(fromUnit)}|${extractCode(toUnit)}`;
     }
 
     function parsePairKey(key) {
@@ -1787,8 +1842,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateFavoriteStars() {
-        const fromVal = fromInput.value;
-        const toVal = toInput.value;
+        const fromVal = extractCode(fromInput.value);
+        const toVal = extractCode(toInput.value);
         const currentKey = getPairKey(currentCategory, fromVal, toVal);
 
         if (currentCategory === "Currency" || currentCategory === "Miles") {
@@ -1823,8 +1878,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function toggleFavoriteCurrentPair() {
         if (currentCategory === "Currency" || currentCategory === "Miles") {
-            const fromVal = fromInput.value;
-            const toVal = toInput.value;
+            const fromVal = extractCode(fromInput.value);
+            const toVal = extractCode(toInput.value);
             if (!fromVal || !toVal) return;
 
             const key = getPairKey(currentCategory, fromVal, toVal);
@@ -1881,7 +1936,10 @@ document.addEventListener("DOMContentLoaded", () => {
         triggerDataSyncPipeline();
     }
 
-    function calculateLiveRate(category, from, to) {
+    function calculateLiveRate(category, rawFrom, rawTo) {
+        const from = extractCode(rawFrom);
+        const to = extractCode(rawTo);
+
         if (category === "Currency") {
             if (!latestRates[from] || !latestRates[to]) return "N/A";
             return (latestRates[to] / latestRates[from]).toFixed(4);
@@ -2113,7 +2171,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localHelper.style.display = "none";
             mainTitle.textContent = "Miles & Points Converter";
             document.getElementById("convert").textContent = "Convert Miles";
-            populateSelects(Object.keys(milesPrograms), savedFrom || "American", savedTo || "USD ($ US Dollar)");
+            populateSelects(Object.keys(milesPrograms), savedFrom || "Delta", savedTo || "USD");
         } else {
             amountInput.parentElement.style.display = "flex";
             translateTextRow.style.display = "none";
@@ -2149,13 +2207,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function convert() {
-        const from = fromInput.value;
-        const to = toInput.value;
+        const rawFrom = fromInput.value;
+        const rawTo = toInput.value;
 
         if (currentCategory === "Translate") {
             const text = translateText.value;
-            const srcCode = translationLanguages[from];
-            const targetCode = translationLanguages[to];
+            const srcCode = translationLanguages[rawFrom];
+            const targetCode = translationLanguages[rawTo];
 
             if (!text.trim()) {
                 resultBox.textContent = "Please enter text to translate.";
@@ -2189,13 +2247,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const amount = parseFloat(amountInput.value || 1);
+        const from = extractCode(rawFrom);
+        const to = extractCode(rawTo);
 
         if (currentCategory === "Miles") {
-            const fromRate = milesPrograms[from] !== undefined ? milesPrograms[from] : (latestRates[from] ? (1 / latestRates[from]) : null);
-            const toRate = milesPrograms[to] !== undefined ? milesPrograms[to] : (latestRates[to] ? (1 / latestRates[to]) : null);
+            const fromRate = milesPrograms[from] !== undefined ? milesPrograms[from] : (milesPrograms[rawFrom] !== undefined ? milesPrograms[rawFrom] : (latestRates[from] ? (1 / latestRates[from]) : null));
+            const toRate = milesPrograms[to] !== undefined ? milesPrograms[to] : (milesPrograms[rawTo] !== undefined ? milesPrograms[rawTo] : (latestRates[to] ? (1 / latestRates[to]) : null));
 
-            if (fromRate === null) return resultBox.textContent = "Invalid 'From' program selected.";
-            if (toRate === null) return resultBox.textContent = "Invalid 'To' target selected.";
+            if (fromRate === null) return resultBox.textContent = "Please select correct program codes.";
+            if (toRate === null) return resultBox.textContent = "Please select correct program codes.";
 
             const totalUsdValue = amount * fromRate;
             let converted = totalUsdValue / toRate;
@@ -2211,18 +2271,28 @@ document.addEventListener("DOMContentLoaded", () => {
         let converted = 0;
 
         if (currentCategory === "Currency") {
-            let fromKey = Object.keys(latestRates).find(k => k.toLowerCase() === from.toLowerCase()) || from.toUpperCase();
-            let toKey = Object.keys(latestRates).find(k => k.toLowerCase() === to.toLowerCase()) || to.toUpperCase();
+            // Strict currency code validation check
+            const isValidFrom = currencyList.some(c => c.toUpperCase() === from);
+            const isValidTo = currencyList.some(c => c.toUpperCase() === to);
+
+            if (!isValidFrom || !isValidTo) {
+                return resultBox.textContent = "Please select correct currency codes (e.g. USD, EUR, JPY).";
+            }
+
+            let fromKey = currencyList.find(k => k.toUpperCase() === from) || from;
+            let toKey = currencyList.find(k => k.toUpperCase() === to) || to;
 
             if (!latestRates[fromKey] || !latestRates[toKey]) {
                 try {
                     const res = await fetch(API + fromKey);
                     const data = await res.json();
+                    if (!data || !data.rates || !data.rates[toKey]) {
+                        return resultBox.textContent = "Please select correct currency codes.";
+                    }
                     const rate = data.rates[toKey];
-                    if (!rate) throw new Error("Invalid rate");
                     converted = amount * rate;
                 } catch {
-                    return resultBox.textContent = "Conversion API Error.";
+                    return resultBox.textContent = "Please select correct currency codes.";
                 }
             } else {
                 const rate = latestRates[toKey] / latestRates[fromKey];
@@ -2231,23 +2301,23 @@ document.addEventListener("DOMContentLoaded", () => {
         } 
         else if (currentCategory === "Length" || currentCategory === "Weight" || currentCategory === "Volume") {
             const baseRates = units[currentCategory];
-            if (!baseRates[from] || !baseRates[to]) {
+            if (!baseRates[rawFrom] || !baseRates[rawTo]) {
                 return resultBox.textContent = "Please select valid units from the dropdown.";
             }
-            const valInBase = amount * baseRates[from]; 
-            converted = valInBase / baseRates[to];      
+            const valInBase = amount * baseRates[rawFrom]; 
+            converted = valInBase / baseRates[rawTo];      
         } 
         else if (currentCategory === "Temp") {
-            if (!units.Temp.includes(from) || !units.Temp.includes(to)) {
-                return resultBox.textContent = "Please select valid temperatures.";
+            if (!units.Temp.includes(rawFrom) || !units.Temp.includes(rawTo)) {
+                return resultBox.textContent = "Please select valid temperature units.";
             }
-            if (from === to) converted = amount;
-            else if (from === "Celsius" && to === "Fahrenheit") converted = (amount * 9/5) + 32;
-            else if (from === "Celsius" && to === "Kelvin") converted = amount + 273.15;
-            else if (from === "Fahrenheit" && to === "Celsius") converted = (amount - 32) * 5/9;
-            else if (from === "Fahrenheit" && to === "Kelvin") converted = (amount - 32) * 5/9 + 273.15;
-            else if (from === "Kelvin" && to === "Celsius") converted = amount - 273.15;
-            else if (from === "Kelvin" && to === "Fahrenheit") converted = (amount - 273.15) * 9/5 + 32;
+            if (rawFrom === rawTo) converted = amount;
+            else if (rawFrom === "Celsius" && rawTo === "Fahrenheit") converted = (amount * 9/5) + 32;
+            else if (rawFrom === "Celsius" && rawTo === "Kelvin") converted = amount + 273.15;
+            else if (rawFrom === "Fahrenheit" && rawTo === "Celsius") converted = (amount - 32) * 5/9;
+            else if (rawFrom === "Fahrenheit" && rawTo === "Kelvin") converted = (amount - 32) * 5/9 + 273.15;
+            else if (rawFrom === "Kelvin" && rawTo === "Celsius") converted = amount - 273.15;
+            else if (rawFrom === "Kelvin" && rawTo === "Fahrenheit") converted = (amount - 273.15) * 9/5 + 32;
         }
 
         let formattedStr = converted;
@@ -2257,7 +2327,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formattedStr = Math.round(converted * 100000000) / 100000000;
         }
 
-        resultBox.textContent = `${amount} ${from.toUpperCase()} = ${formattedStr} ${to.toUpperCase()}`;
+        resultBox.textContent = `${amount} ${from} = ${formattedStr} ${to}`;
         saveState();
         triggerDataSyncPipeline();
     }
@@ -2705,7 +2775,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!initialFrom && currentCategory === "Currency") {
                 initialFrom = detectedLocalCurrency;
             } else if (!initialFrom) {
-                initialFrom = currentCategory === "Miles" ? "American" :
+                initialFrom = currentCategory === "Miles" ? "Delta" :
                               currentCategory === "Length" ? "Meters" :
                               currentCategory === "Weight" ? "Kilograms" :
                               currentCategory === "Volume" ? "Liters" : "Celsius";
@@ -2718,12 +2788,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 populateSelects(currencyList, initialFrom, savedTo || "EUR");
                 evalLocalCurrencyShortcut();
             } else if (currentCategory === "Miles") {
-                populateSelects(Object.keys(milesPrograms), initialFrom || "American", savedTo || "USD ($ US Dollar)");
+                populateSelects(Object.keys(milesPrograms), initialFrom || "Delta", savedTo || "USD");
             }
 
             if (urlArgs) {
-                if (urlArgs.from) fromInput.value = urlArgs.from;
-                if (urlArgs.to) toInput.value = urlArgs.to;
+                if (urlArgs.from) fromInput.value = extractCode(urlArgs.from);
+                if (urlArgs.to) toInput.value = extractCode(urlArgs.to);
                 if (urlArgs.amount) amountInput.value = urlArgs.amount;
                 convert();
             }
@@ -2790,13 +2860,24 @@ document.addEventListener("DOMContentLoaded", () => {
     translateText.addEventListener("input", saveState);
     
     fromInput.addEventListener("input", () => {
+        normalizeCurrencyInput(fromInput);
         saveState();
         updateFavoriteStars();
         evalLocalCurrencyShortcut();
     });
+    
     toInput.addEventListener("input", () => {
+        normalizeCurrencyInput(toInput);
         saveState();
         updateFavoriteStars();
+    });
+
+    fromInput.addEventListener("change", () => {
+        normalizeCurrencyInput(fromInput);
+    });
+
+    toInput.addEventListener("change", () => {
+        normalizeCurrencyInput(toInput);
     });
 
     favPairBtn.addEventListener("click", toggleFavoriteCurrentPair);
